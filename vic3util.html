@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Vic3 mapdata editor</title>
+    <link rel="stylesheet" href="src/css/index.css">
+    <link rel="icon" href="src/css/favicon.ico">
+    <script type="module" src="src/index.js"></script>   
+    <script type="module" src="src/button.js"></script> 
+    <script type="module" src="src/pannel/pannelboardmove.js"></script> 
+    <script type="module" src="src/pannel/prov_pannel.js"></script> 
+    <script type="module" src="src/i18n/i18n.js"></script> 
+  </head>
+  <body>
+    <div id="mask" class="mask"></div>
+    <div id="pannel" class="pageHeader">
+        
+        <p id="board">
+            <span id="progress">加载中</span>
+            <select id="mode_selection">
+              <option value="prov">地块</option>
+              <option value="state">省份</option>
+              <option value="edit">编辑</option>
+              <option value="strategic">战略</option>
+              <option value="country">国家</option>
+            </select>
+            <input id="river_draw" checked="true" type="checkbox"><label for="river_draw">显示河流</label>
+            <input id="city_draw"checked="true" type="checkbox"><label for="city_draw">显示城市</label>
+            <input id="adj_draw"  checked="true" true type="checkbox"><label for="adj_draw">显示连线</label>
+            <button id="save">保存</button>
+            <span id="output" class="output"></span>
+        </p>
+        
+    </div>
+    
+    <div id="canvasbg" class="canvasbg">
+      <div id="canvasmask" class="mask" style="display: none;"></div>
+        <canvas id="canvas" ></canvas>
+    </div>
+    <div id="pannelboard" class="pannelboard">
+        <p>
+        <span class="pannel_top">编辑栏</span>
+        <span class="pannel_top_right" id="select_info"></span>
+        
+      </p>
+      <div id="prov_pannelboard" style="display: none;">
+        <p>
+        <input id="random_color" type="text">
+        <button id="random_color_visual"></button></p>
+      </div>
+        <div id="edit_pannelboard"><p>
+          <input id="state_id" type="text">
+          <input id="country_id" type="text">
+        </p>
+        <button id="convert">转换</button>
+      </div>
+      <div id="state_pannelboard" style="display: none;"><p>
+        <select id="state_edit_city">
+          <option value="city">城市</option>
+          <option value="port">港口</option>
+          <option value="mine">矿脉</option>
+          <option value="wood">林场</option>
+          <option value="farm">农场</option>
+        </select>
+        <button>开始编辑</button>
+        <select id="state_edit_mode_selection">
+          <option value="detail">属性</option>
+          <option value="pops">人口</option>
+          <option value="building">建筑</option>
+          <option value="aresource">农产</option>
+          <option value="cresource">矿产</option>
+          <option value="resource">资源</option>
+        </select>
+        <div id="state_public" class="state_property"></div>
+        <div id ="state_private" class="state_property"></div>
+        <div id ="state_more_info" class="state_more_info" style="display: none;"></div>
+        
+      </p>
+      </div>
+      <div id="strategic_pannelboard">
+        <p>
+          <input id="strategic_name_input" type="text">
+        </p>
+        <p>
+          <input id="culture_name_input" type="text">
+        </p><p>
+          <input id="capital_name_input" type="text">
+        </p>
+        <button id="convert_strategy">转换</button>
+      </div> 
+    </div>
+    <div id="select_box" class="select_box"></div>
+
+  </body>
+</html>
+
+
+
