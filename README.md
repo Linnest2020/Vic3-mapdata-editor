@@ -48,6 +48,7 @@ There are serval mode of the editor: `prov`,`state`,`edit`,`strategy`,and `count
 -   `state`: Click to select a state_region, and edit the property of this state_region
 -   `edit`: Editing the `history/state`. Click to select a prov, `ctrl`+click to select multiple provs, `shift` + click to select all of the provs of the state_region which contains your selected prov, press the mouse left key and drag and release to select a series of provs in a rectangle selecting area,edit the input of state and country, press `convert` button to convert.
 -   `strategy`: Click to select a state_region, `ctrl`+click to select multiple state_regions, edit the strategy_region, press `convert` button to convert.
+-	`terrain`: Show the terrian if you put `map_data/province_terrains.txt` in `data` folder and leave the comment on line 134 and 346 in `src/index.js`, IT IS VERY SLOW(3 minutes to render it) 
 -   `country`: Just for watch and it has the risk of crash
 
 In your editing, the `save` button should be press to save the files.
