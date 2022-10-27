@@ -4,7 +4,7 @@
 
 ## A Brief Introduction
 
-Vic3 mapdata editor is an open source province editor based off [Jomini]("https://github.com/nickbabcock/jomini").
+Vic3 mapdata editor is an open source province editor based off [Jomini](https://github.com/nickbabcock/jomini).
 
 ## Abilities
 
@@ -19,7 +19,7 @@ Vic3 mapdata editor is an open source province editor based off [Jomini]("https:
 -   Visualize and edit adjacencies
 -   Real-time visualization and editing of city provinces
 -   A live instance on the web that is created with docker
--   Refactor JavaScript to TypeScript
+-   Refactor JavaScript to TypeScript?
 -   Good autocomplete
 -   Good user and developer documentation
 -   Scalable UI(I'm not joking，this is really difficult)
@@ -56,25 +56,33 @@ If you select `debug` in the tray menu, in your next editing(fresh it or click `
 
 Finally you will get a series of document, you should place them in `mod` folder(where you create your mod!), and make them replace the vanilla files
 
-```
-<!-- description.mod -->
-name="Yourmod"
-version="0.1.1"
-tags={
-	"funny modding"
+in `.metadata/metadata.json`:
+
+```json
+{
+  "name" : "Yourmod",
+  "id" : "your.mod",
+  "version" : "0.01",
+  "supported_game_version" : "",
+  "short_description" : "",
+  "tags" : ["funny modding"],
+  "relationships" : [],
+  "game_custom_data" : {
+    "multiplayer_synchronized" : true,
+    "replace_paths": [
+      "common/history/states",
+      "common/history/pops",
+      "common/history/buildings",
+      "map_data/state_regions",
+      "common/strategic_regions"
+    ]
+  }
 }
-picture="thumbnail.png"
-replace_path="common/history/states"
-replace_path="map_data/state_regions"
-replace_path="common/history/strategic_regions"
-replace_path="common/history/buildings"
-replace_path="common/history/pops"
-
-<!-- In your mod folder there is only one file, they are -->
-<!-- common/history/states/00_states.txt -->
-<!-- map_data/state_regions/01_state_regions.txt -->
-<!-- common/history/strategic_regions/02_strategic_regions.txt -->
-<!-- common/history/buildings/04_buildings.txt -->
-<!-- common/history/pops/05_pops.txt -->
 ```
 
+In your mod folder there is only one file, they are:
++ common/history/states/00_states.txt
++ map_data/state_regions/01_state_regions.txt
++ common/strategic_regions/02_strategic_regions.txt
++ common/history/buildings/04_buildings.txt
++ common/history/pops/05_pops.txt

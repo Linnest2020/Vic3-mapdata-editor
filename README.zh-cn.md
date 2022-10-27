@@ -4,7 +4,7 @@
 
 ## 简介
 
-Vic3 mapdata editor 是基于[Jomini]("https://github.com/nickbabcock/jomini")的, 开源的 Vic3 地图省份编辑器。
+Vic3 mapdata editor 是基于[Jomini](https://github.com/nickbabcock/jomini)的, 开源的 Vic3 地图省份编辑器。
 
 ## 特性
 
@@ -56,25 +56,32 @@ Vic3 mapdata editor 是基于[Jomini]("https://github.com/nickbabcock/jomini")�
 
 最后你会在`data/outputs` 找到一系列文件, 这些文件应当在 mod 文件夹里,也就是你创建的文件夹里替换掉原版的文件
 
-```
-<!-- description.mod -->
-name="Yourmod"
-version="0.1.1"
-tags={
-	"funny modding"
+在`.metadata/metadata.json`中
+```json
+{
+  "name" : "Yourmod",
+  "id" : "your.mod",
+  "version" : "0.01",
+  "supported_game_version" : "",
+  "short_description" : "",
+  "tags" : ["funny modding"],
+  "relationships" : [],
+  "game_custom_data" : {
+    "multiplayer_synchronized" : true,
+    "replace_paths": [
+      "common/history/states",
+      "common/history/pops",
+      "common/history/buildings",
+      "map_data/state_regions",
+      "common/strategic_regions"
+    ]
+  }
 }
-picture="thumbnail.png"
-replace_path="common/history/states"
-replace_path="map_data/state_regions"
-replace_path="common/history/strategic_regions"
-replace_path="common/history/pops"
-replace_path="common/history/buildings"
-
-<!-- 在你的mod 的文件夹的对应文件夹里均只有一个文件, 分别是 -->
-<!-- common/history/states/00_states.txt -->
-<!-- map_data/state_regions/01_state_regions.txt -->
-<!-- common/history/strategic_regions/02_strategic_regions.txt -->
-<!-- common/history/buildings/04_buildings.txt -->
-<!-- common/history/pops/05_pops.txt -->
-
 ```
+
+在你的mod 的文件夹的对应文件夹里均只有一个文件, 分别是
++ common/history/states/00_states.txt
++ map_data/state_regions/01_state_regions.txt
++ common/strategic_regions/02_strategic_regions.txt
++ common/history/buildings/04_buildings.txt
++ common/history/pops/05_pops.txt
