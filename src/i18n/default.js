@@ -50,6 +50,13 @@ let localization = {
     state_detail_public:"shared property",
     state_detail_private:"exclusive property",
 
+    arable_land:"arable land",
+    reading_terrain_map:"reading_terrain_map",
+    read_terrain_map_finnish:"read_terrain_map_finnish",
+    loading_terrain:"loading terrain",
+    load_terrain_fin:"load terrain fin",
+    terrain:"地形",
+
 }
 
 export {localization}

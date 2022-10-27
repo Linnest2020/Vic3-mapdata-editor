@@ -18,6 +18,7 @@ var state_name = new Set()
 var reset_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
 var state_data = null
 var strategic_data = null
+var terrain_data = null
 
 var colormap = null
 var statecolormap = {}
@@ -35,7 +36,8 @@ var full_data = {
     statepointmap,
     reset_data,
     state_data,
-    strategic_data
+    strategic_data,
+    terrain_data,
 }
 export {full_data}
 
@@ -62,7 +64,7 @@ var debug = await check_debug()
 var strategic_regions,state_regions,histroy_state,pops,buildings
 
 var histroy_state_dict,state_regions_map,strategic_regions_map,pops_map,buildings_map
-
+var terrain_map
 if (!debug){
     strategic_regions = await get_file_dict("strategic_regions")
     state_regions = await get_file_dict("state_regions")
@@ -88,7 +90,7 @@ if (!debug){
 console.log(pops_map,buildings_map)
 
 var strategic_data_lock = false
-
+var terrain_data_lock = false
 
 var adjacencies = await fetch("./data/adjacencies.csv").then(resp => resp.text()).then(buffer => get_csv(buffer))
 
@@ -102,7 +104,8 @@ for (let i=0;i<adjacencies.length;i++){
     }
 }
 
-var full_map_data = {histroy_state_dict,adj_pos,state_regions_map,strategic_regions_map,strategic_data_lock,pops_map,buildings_map}
+var full_map_data = {histroy_state_dict,adj_pos,state_regions_map,strategic_regions_map,pops_map,buildings_map,terrain_map,
+    strategic_data_lock,terrain_data_lock}
 export {full_map_data}
 
 const img = new Image()
@@ -131,6 +134,7 @@ init_worker.onmessage = function(e) {
         full_data.statecolormap = statecolormap
         full_data.state_data = state_data
         
+        // get_text_dict("./data/province_terrains.txt").then(res => {full_map_data.terrain_map = res})
         document.getElementById("mask").style.display = "none"
 
         init_worker.terminate()
@@ -173,7 +177,7 @@ var little_data = {
 }
 export {little_data}
 
-import { strategic_mode,country_mode,state_mode } from './mode_map_render.js';
+import { strategic_mode,country_mode,state_mode,terrain_mode } from './mode_map_render.js';
 import { do_draw } from './drawing_little.js';
 import { select_provs ,select_states,select_prov_pure } from './canvas_selection.js';
 
@@ -336,6 +340,10 @@ const mode_render = (mode) => {
         case "strategic":
             show_pannelboard(strategic_pannelboard)
             strategic_mode();
+            break
+        case "terrain":
+            show_pannelboard(null)
+            // terrain_mode();
             break
         case "country":
             show_pannelboard(null)

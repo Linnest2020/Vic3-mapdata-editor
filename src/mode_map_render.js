@@ -1,5 +1,8 @@
 import { full_data,full_map_data } from "./index.js";
 import { do_draw } from './drawing_little.js';
+import {get_text_dict} from "./init_utils.js"
+import { localization } from "./i18n/i18n.js";
+
 
 const strategic_mode = () => {
     // console.log(jomini.parseText("color = hsv{ 0.99  0.7  0.9 }"))
@@ -81,4 +84,56 @@ const state_mode = () => {
     do_draw()
 }
 
-export {strategic_mode,country_mode,state_mode}
+let terrain_worker = new Worker("src/workers/terrain_workers.js")
+terrain_worker.onmessage = function(e) {
+    if(e.data["localiztion"]) {console.log(e.data["localiztion"])}
+    else if (!e.data["ok"]) { document.getElementById('progress').textContent = e.data["data"] }
+    else {
+        document.getElementById('progress').style.display = "none"
+
+        full_map_data.terrain_map = e.data.terrain_map
+        full_data.terrain_data = e.data.terrain_data
+        
+        document.getElementById("mask").style.display = "none"
+        full_data.ctx.putImageData(full_data.terrain_data, 0, 0)
+        console.log("传递完毕")
+        terrain_worker.terminate()
+    }
+}
+
+let terrain_map
+
+const terrain_mode = () => {
+    pannelboard.style.display = "block"
+    if (!full_data.terrain_data || !full_map_data.terrain_data_lock){
+        document.getElementById("mask").style.display = "block"
+        document.getElementById('progress').style.display = "block"
+        if (!full_map_data.terrain_map){
+            document.getElementById('progress').textContent = localization.reading_terrain_map
+            get_text_dict("./data/province_terrains.txt").then(res => {full_map_data.terrain_map = res})
+            document.getElementById('progress').textContent = localization.read_terrain_map_finnish
+        }
+        
+
+        terrain_worker.postMessage({localization})
+        terrain_worker.postMessage({
+            colormap:full_data.colormap,
+            img_data:full_data.state_data,
+            terrain_map:full_map_data.terrain_map
+
+        })
+
+    
+        full_data.ctx.putImageData(full_data.state_data, 0, 0)
+        
+        full_map_data.terrain_data_lock = true
+    }
+    if (full_data.terrain_data){
+        full_data.ctx.putImageData(full_data.terrain_data, 0, 0)
+    }
+    
+}
+
+
+
+export {strategic_mode,country_mode,state_mode,terrain_mode}

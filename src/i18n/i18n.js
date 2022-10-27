@@ -28,6 +28,7 @@ document.querySelector("option[value=prov]").innerText = localization.provs
 document.querySelector("option[value=state]").innerText = localization.states
 document.querySelector("option[value=edit]").innerText = localization.edit
 document.querySelector("option[value=strategic]").innerText = localization.strategic
+document.querySelector("option[value=terrain]").innerText = localization.terrain
 document.querySelector("option[value=country]").innerText = localization.country
 
 document.querySelector("option[value=city]").innerText = localization.city
