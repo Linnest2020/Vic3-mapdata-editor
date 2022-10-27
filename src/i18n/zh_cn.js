@@ -49,6 +49,13 @@ let localization = {
 
     state_detail_public:"共有属性",
     state_detail_private:"专有属性",
+
+    arable_land:"耕地",
+    reading_terrain_map:"读取terrains.txt",
+    read_terrain_map_finnish:"读取完毕",
+    loading_terrain:"加载地形",
+    load_terrain_fin:"加载地形完毕",
+    terrain:"地形",
 }
 
 export {localization}

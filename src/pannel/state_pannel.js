@@ -555,12 +555,48 @@ const state_aresource_edit = (info) => {
 
     state_public.querySelector("button").addEventListener("click",function(e){state_public.appendChild(draw_pm_detail("",state_detail,"arable_resources"))})
 
+    if (state_detail["arable_land"]){
+        state_public.appendChild(draw_one_detail(state_detail["arable_land"],localization.arable_land,state_detail,"arable_land"))
+    } else {
+        state_public.appendChild(draw_one_detail("",localization.arable_land,state_detail,"arable_land"))
+    }
+    
     if (state_detail["arable_resources"]){
         for (let i=0;i<state_detail["arable_resources"].length;i++){
             state_public.appendChild(draw_pm_detail(state_detail["arable_resources"][i],state_detail,"arable_resources"))
         }
     }
 }
+
+const draw_one_detail = (key,text,data,kw) => {
+    let dom = document.createElement("div")
+
+    let alands = document.createTextNode(text)
+    let key_input = document.createElement("input")
+    
+    key_input.value = key
+    key_input.type = "text"
+    key_input.classList.add("key_input")
+    dom.appendChild(alands)
+    dom.appendChild(key_input)
+    
+    let plus = btn_adjustment("√")
+    dom.appendChild(plus)
+    plus.onclick = function(e) {
+        if (!data[`${kw}`] && !key_input.value) return
+
+        if (!data[`${kw}`] &&key_input.value ) {
+            data[`${kw}`] = parseInt(key_input.value)
+        } else if (data[`${kw}`] && !key_input.value){
+            delete data[`${kw}`]
+        } else {
+            console.log("hello?",data[`${kw}`])
+            data[`${kw}`] = parseInt(key_input.value)
+        }
+    }
+    return dom
+}
+
 
 
 const draw_kv_detail = (key,value,data) => {
