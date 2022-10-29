@@ -125,7 +125,8 @@ const terrain_mode = () => {
         
     
         full_data.ctx.putImageData(full_data.state_data, 0, 0)
-        full_data.terrain_data = render_terrain_data(full_data.state_data,full_data.colormap)
+        let img_data = full_data.ctx.getImageData(0,0,canvas.width,canvas.height)
+        full_data.terrain_data = render_terrain_data(img_data,full_data.colormap)
         full_data.ctx.putImageData(full_data.terrain_data, 0, 0)
         
         full_map_data.terrain_data_lock = true
