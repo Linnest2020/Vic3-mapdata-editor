@@ -6,10 +6,4 @@ data/pops/*.txt
 data/state_regions/*.txt
 data/buildings/*.txt
 data/strategic_regions/*.txt
-data/rivers.png
 data/strategic_regions/*.info
-data/adjacencies.csv
-data/province_terrains.txt
-data/provinces.png
-data/rivers.png
-data/adjacencies.csv
