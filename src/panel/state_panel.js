@@ -41,7 +41,7 @@ export {handle_state_edit}
 
 
 const state_detail_edit = (info) => {
-    let state_detail = full_map_data.histroy_state_dict["STATES"][info[0]]
+    let state_detail = full_map_data.history_state_dict["STATES"][info[0]]
     let state_public_detail = {}
     let state_split_detail = {}
     let state_private_detail = {}
@@ -245,7 +245,7 @@ const draw_pop_detail = (cu,religion,size,data,pop_type,disabled=true) => {
     dom.appendChild(pt_input)
 
     minus.onclick = function(e) {
-        if (!cu_input.value || !value_input.value){
+        if (!cu_input.value || !size_input.value){
             if (!cu && !size) dom.parentNode.removeChild(dom)
             else return
         }
@@ -626,7 +626,7 @@ const draw_kv_detail = (key,value,data) => {
 
     minus.onclick = function(e) {
         if (!key_input.value){
-            if (!key & !value) dom.parentNode.removeChild(dom)
+            if (!key && !value) dom.parentNode.removeChild(dom)
             else return
         }
 
@@ -716,7 +716,7 @@ const draw_resource_detail = (key,akey,un,max,data,index) => {
 
     minus.onclick = function(e) {
         if (!key_input.value){
-            if (!key & !un) dom.parentNode.removeChild(dom)
+            if (!key && !un) dom.parentNode.removeChild(dom)
             else return
         }
 
