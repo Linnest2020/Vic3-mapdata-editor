@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"sync"
 	"syscall"
 
@@ -41,7 +42,12 @@ func main() {
 		http.Handle("/", http.HandlerFunc(
 			func(rw http.ResponseWriter, r *http.Request) {
 				log.Printf("%s %s%s from %s\n", r.Method, r.Host, r.URL.String(), r.RemoteAddr)
-				rw.Header().Set("Access-Control-Allow-Origin", "*")
+				if strings.HasSuffix(r.URL.String(), ".js") {
+					rw.Header().Set("Content-Type", "application/javascript; charset=utf-8")
+				}
+				if strings.HasSuffix(r.URL.String(), ".png") {
+					rw.Header().Set("Access-Control-Allow-Origin", "*")
+				}
 				http.FileServer(http.Dir(".")).ServeHTTP(rw, r)
 			}))
 		http.Handle("/datab", http.HandlerFunc(

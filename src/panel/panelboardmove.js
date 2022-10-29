@@ -1,33 +1,33 @@
-var pannelboard = document.getElementById('pannelboard')
+var panelboard = document.getElementById('panelboard')
 var canvas = document.getElementById('canvas')
-let pannelboard_lock = true
+let panelboard_lock = true
 let x = 0
 
 const lock = () => {
-    pannelboard_lock = true
-    pannelboard.style.cursor = "default"
+    panelboard_lock = true
+    panelboard.style.cursor = "default"
 }
 
 const unlock = () => {
-    pannelboard_lock = false
-    pannelboard.style.cursor = "move"
+    panelboard_lock = false
+    panelboard.style.cursor = "move"
 }
 
 window.addEventListener("blur", () => { lock() })
-pannelboard.onmousedown = function (e) {
-    x = e.pageX - pannelboard.offsetLeft
+panelboard.onmousedown = function (e) {
+    x = e.pageX - panelboard.offsetLeft
     unlock()
 }
-pannelboard.onmouseup = function (e) { lock() }
-pannelboard.onmousemove = function (e) {
+panelboard.onmouseup = function (e) { lock() }
+panelboard.onmousemove = function (e) {
     e.preventDefault()
-    if (!pannelboard_lock) {
+    if (!panelboard_lock) {
         let left = e.pageX - x
-        let max = window.innerWidth - pannelboard.offsetWidth
+        let max = window.innerWidth - panelboard.offsetWidth
         if (left < 0) left = 0
         if (left > max) left = max
 
-        pannelboard.style.left = left + "px"
+        panelboard.style.left = left + "px"
     }
 
 }

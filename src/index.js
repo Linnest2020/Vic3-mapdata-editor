@@ -4,7 +4,7 @@ const wasmUrl = '/src/jomini/jomini.wasm';
 const canvas = document.getElementById('canvas');
 canvas.style.cursor = "crosshair"
 
-var ctx = canvas.getContext('2d',{colorSpace: "srgb"});
+var ctx = canvas.getContext('2d',{colorSpace: "srgb",willReadFrequently:true});
 
 var tip = document.getElementById('output')
 

@@ -3,7 +3,7 @@ import {localization} from "../i18n/i18n.js"
 
 let state_public = document.getElementById("state_public")
 let state_private = document.getElementById("state_private")
-let pannel = document.getElementById("pannelboard")
+let panel = document.getElementById("panelboard")
 let more_info = document.getElementById("state_more_info")
 
 let mode = "detail"
@@ -176,7 +176,7 @@ const draw_state_detail = (key,value,data,disabled=true) => {
 
 const state_pops_edit = (info) => {
     let info_detail = "region_state:" + info[1].replace("c:","")
-    pannel.style.maxWidth = "45%"
+    panel.style.maxWidth = "45%"
     console.log(full_map_data.pops_map)
     if (!full_map_data.pops_map["POPS"][info[0]]) full_map_data.pops_map["POPS"][info[0]] = {[info_detail]:{"create_pop":{}}}
     if (!full_map_data.pops_map["POPS"][info[0]][info_detail]) full_map_data.pops_map["POPS"][info[0]][info_detail] = {"create_pop":{}}
@@ -334,7 +334,7 @@ const draw_pop_detail = (cu,religion,size,data,pop_type,disabled=true) => {
 
 const state_building_edit = (info) => {
     let info_detail = "region_state:" + info[1].replace("c:","")
-    pannel.style.maxWidth = "45%"
+    panel.style.maxWidth = "45%"
     console.log(full_map_data.buildings_map["BUILDINGS"])
     if (!full_map_data.buildings_map["BUILDINGS"][info[0]]) full_map_data.buildings_map["BUILDINGS"][info[0]] = {[info_detail]:{"create_building":{}}}
     if (!full_map_data.buildings_map["BUILDINGS"][info[0]][info_detail]) full_map_data.buildings_map["BUILDINGS"][info[0]][info_detail] = {"create_building":{}}
@@ -751,7 +751,7 @@ const draw_resource_detail = (key,akey,un,max,data,index) => {
 }
 
 const state_resource_edit = (info) => {
-    pannel.style.maxWidth = "45%"
+    panel.style.maxWidth = "45%"
     let state_detail = full_map_data.state_regions_map[info[0].replace("s:","")]
     state_public.innerHTML = `<p>${info[0]}.region_state:${info[1].replace("c:","")}</p><p>${localization.resource_full}:<button>+</button></p>`
     state_private.innerHTML = ""
