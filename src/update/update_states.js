@@ -27,18 +27,18 @@ const update_map = (provs_name,state_name,country_name) => {
                 old_state = oldold[0]
                 old_country = oldold[1]
                 
-                if ( !(full_map_data.histroy_state_dict["STATES"][old_state]["create_state"] instanceof Array)){
-                    full_map_data.histroy_state_dict["STATES"][old_state]["create_state"]["owned_provinces"] = full_map_data.histroy_state_dict["STATES"][old_state]["create_state"]["owned_provinces"].filter(item => item!=prov)
-                    if (full_map_data.histroy_state_dict["STATES"][old_state]["create_state"]["owned_provinces"].length == 0){
-                        delete full_map_data.histroy_state_dict["STATES"][old_state]
+                if ( !(full_map_data.history_state_dict["STATES"][old_state]["create_state"] instanceof Array)){
+                    full_map_data.history_state_dict["STATES"][old_state]["create_state"]["owned_provinces"] = full_map_data.history_state_dict["STATES"][old_state]["create_state"]["owned_provinces"].filter(item => item!=prov)
+                    if (full_map_data.history_state_dict["STATES"][old_state]["create_state"]["owned_provinces"].length == 0){
+                        delete full_map_data.history_state_dict["STATES"][old_state]
                         delete full_map_data.state_regions_map[old_state.replace("s:","")]
                     }
                 } else {
-                    for (let j=0;j<full_map_data.histroy_state_dict["STATES"][old_state]["create_state"].length;j++){
-                        if (full_map_data.histroy_state_dict["STATES"][old_state]["create_state"][j]["country"] == old_country){
-                            full_map_data.histroy_state_dict["STATES"][old_state]["create_state"][j]["owned_provinces"] = full_map_data.histroy_state_dict["STATES"][old_state]["create_state"][j]["owned_provinces"].filter(item => item!=prov)
-                            if (full_map_data.histroy_state_dict["STATES"][old_state]["create_state"][j]["owned_provinces"].length == 0){
-                                full_map_data.histroy_state_dict["STATES"][old_state]["create_state"] = full_map_data.histroy_state_dict["STATES"][old_state]["create_state"].filter((items,index) => ![j].includes(index))
+                    for (let j=0;j<full_map_data.history_state_dict["STATES"][old_state]["create_state"].length;j++){
+                        if (full_map_data.history_state_dict["STATES"][old_state]["create_state"][j]["country"] == old_country){
+                            full_map_data.history_state_dict["STATES"][old_state]["create_state"][j]["owned_provinces"] = full_map_data.history_state_dict["STATES"][old_state]["create_state"][j]["owned_provinces"].filter(item => item!=prov)
+                            if (full_map_data.history_state_dict["STATES"][old_state]["create_state"][j]["owned_provinces"].length == 0){
+                                full_map_data.history_state_dict["STATES"][old_state]["create_state"] = full_map_data.history_state_dict["STATES"][old_state]["create_state"].filter((items,index) => ![j].includes(index))
 
                             }
                         }
@@ -85,14 +85,14 @@ const update_map = (provs_name,state_name,country_name) => {
             if (full_data.statepointmap[`${state_name}.region_state:${country_name}`]){
                 // exists
                 
-                if ( !(full_map_data.histroy_state_dict["STATES"][state_name]["create_state"] instanceof Array)){
-                    full_map_data.histroy_state_dict["STATES"][state_name]["create_state"]["owned_provinces"].push(prov)
+                if ( !(full_map_data.history_state_dict["STATES"][state_name]["create_state"] instanceof Array)){
+                    full_map_data.history_state_dict["STATES"][state_name]["create_state"]["owned_provinces"].push(prov)
                 } else if (full_data.statepointmap[`${state_name}.region_state:${country_name}`].length == 0){
-                    full_map_data.histroy_state_dict["STATES"][state_name]["create_state"].push({"country":country_name,"owned_provinces":[prov]})
+                    full_map_data.history_state_dict["STATES"][state_name]["create_state"].push({"country":country_name,"owned_provinces":[prov]})
                 } else {
-                    for (let j=0;j<full_map_data.histroy_state_dict["STATES"][state_name]["create_state"].length;j++){
-                        if (full_map_data.histroy_state_dict["STATES"][state_name]["create_state"][j]["country"] == country_name){
-                            full_map_data.histroy_state_dict["STATES"][state_name]["create_state"][j]["owned_provinces"].push(prov)
+                    for (let j=0;j<full_map_data.history_state_dict["STATES"][state_name]["create_state"].length;j++){
+                        if (full_map_data.history_state_dict["STATES"][state_name]["create_state"][j]["country"] == country_name){
+                            full_map_data.history_state_dict["STATES"][state_name]["create_state"][j]["owned_provinces"].push(prov)
                         }
                     }
 
@@ -103,12 +103,12 @@ const update_map = (provs_name,state_name,country_name) => {
 
             } else {
                 // no exists
-                if (!full_map_data.histroy_state_dict["STATES"][state_name]){
-                    full_map_data.histroy_state_dict["STATES"][state_name] = {"create_state":{"country":country_name,"owned_provinces":[prov]}}
-                } else if (full_map_data.histroy_state_dict["STATES"][state_name]["create_state"] instanceof Array){
-                    full_map_data.histroy_state_dict["STATES"][state_name]["create_state"].push({"country":country_name,"owned_provinces":[prov]})
-                } else if (!(full_map_data.histroy_state_dict["STATES"][state_name]["create_state"] instanceof Array)) {
-                    full_map_data.histroy_state_dict["STATES"][state_name]["create_state"] = [full_map_data.histroy_state_dict["STATES"][state_name]["create_state"],{"country":country_name,"owned_provinces":[prov]}]
+                if (!full_map_data.history_state_dict["STATES"][state_name]){
+                    full_map_data.history_state_dict["STATES"][state_name] = {"create_state":{"country":country_name,"owned_provinces":[prov]}}
+                } else if (full_map_data.history_state_dict["STATES"][state_name]["create_state"] instanceof Array){
+                    full_map_data.history_state_dict["STATES"][state_name]["create_state"].push({"country":country_name,"owned_provinces":[prov]})
+                } else if (!(full_map_data.history_state_dict["STATES"][state_name]["create_state"] instanceof Array)) {
+                    full_map_data.history_state_dict["STATES"][state_name]["create_state"] = [full_map_data.history_state_dict["STATES"][state_name]["create_state"],{"country":country_name,"owned_provinces":[prov]}]
                 }
                 full_data.statepointmap[`${state_name}.region_state:${country_name}`] = [...sindex_list]
                 full_data.statecolormap[`${state_name}.region_state:${country_name}`] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]

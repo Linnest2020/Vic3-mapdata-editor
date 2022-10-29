@@ -18,13 +18,13 @@ var statepointmap = {}
 var statecolormap = {}
 var state_data = {}
 var length = 0
-var histroy_state_dictlength = 0
+var history_state_dictlength = 0
 var the_length = 0
-const initiate = (data,histroy_state_dict,width) => { 
+const initiate = (data,history_state_dict,width) => { 
     length = data.data.length
-    histroy_state_dictlength = Object.keys(histroy_state_dict["STATES"]).length
+    history_state_dictlength = Object.keys(history_state_dict["STATES"]).length
     init_colormap(data)
-    init_state_map(colormap,histroy_state_dict)
+    init_state_map(colormap,history_state_dict)
     the_length = Object.keys(statepointmap).length
     get_state_data(data,width)
     postMessage({"data":localization.loading})
@@ -66,11 +66,11 @@ const init_colormap = (img_data) => {
     }
 }
 
-const init_state_map = (colormap,histroy_state_dict) => {
+const init_state_map = (colormap,history_state_dict) => {
     let nowprogress = 0
     let time = new Date().valueOf()
-    for ( let uu=0,len = Object.keys(histroy_state_dict["STATES"]).length;uu<len;uu++){
-        u=Object.keys(histroy_state_dict["STATES"])[uu]
+    for ( let uu=0,len = Object.keys(history_state_dict["STATES"]).length;uu<len;uu++){
+        u=Object.keys(history_state_dict["STATES"])[uu]
         let progress = (uu/len)*100
         if (progress >= nowprogress){
             nowprogress = progress + 0.1
@@ -80,37 +80,37 @@ const init_state_map = (colormap,histroy_state_dict) => {
                 console.log(`${localization.load_states_fin}${new Date().valueOf() - time}`)
             }
         }
-        if (histroy_state_dict["STATES"][u]["create_state"] instanceof Array){
-            for (let n = 0;n < histroy_state_dict["STATES"][u]["create_state"].length;n++){
-                statecolormap[`${u}.region_state:${histroy_state_dict["STATES"][u]["create_state"][n]["country"]}`] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
-                for ( let i =0;i<histroy_state_dict["STATES"][u]["create_state"][n]["owned_provinces"].length;i++){
-                    histroy_state_dict["STATES"][u]["create_state"][n]["owned_provinces"][i] = "x"+parseInt("0"+histroy_state_dict["STATES"][u]["create_state"][n]["owned_provinces"][i]).toString(16).padStart(6, '0').toUpperCase()
-                    for (let j of colormap[histroy_state_dict["STATES"][u]["create_state"][n]["owned_provinces"][i]]){
-                            if (statepointmap[`${u}.region_state:${histroy_state_dict["STATES"][u]["create_state"][n]["country"]}`]){
-                                statepointmap[`${u}.region_state:${histroy_state_dict["STATES"][u]["create_state"][n]["country"]}`].push(j)
-                            } else {statepointmap[`${u}.region_state:${histroy_state_dict["STATES"][u]["create_state"][n]["country"]}`] = [j]}
+        if (history_state_dict["STATES"][u]["create_state"] instanceof Array){
+            for (let n = 0;n < history_state_dict["STATES"][u]["create_state"].length;n++){
+                statecolormap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"][n]["country"]}`] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
+                for ( let i =0;i<history_state_dict["STATES"][u]["create_state"][n]["owned_provinces"].length;i++){
+                    history_state_dict["STATES"][u]["create_state"][n]["owned_provinces"][i] = "x"+parseInt("0"+history_state_dict["STATES"][u]["create_state"][n]["owned_provinces"][i]).toString(16).padStart(6, '0').toUpperCase()
+                    for (let j of colormap[history_state_dict["STATES"][u]["create_state"][n]["owned_provinces"][i]]){
+                            if (statepointmap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"][n]["country"]}`]){
+                                statepointmap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"][n]["country"]}`].push(j)
+                            } else {statepointmap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"][n]["country"]}`] = [j]}
                         }
                 }
             }
         } else{
-            statecolormap[`${u}.region_state:${histroy_state_dict["STATES"][u]["create_state"]["country"]}`] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
-            for (let i =0;i<histroy_state_dict["STATES"][u]["create_state"]["owned_provinces"].length;i++){
-                histroy_state_dict["STATES"][u]["create_state"]["owned_provinces"][i] = "x"+parseInt("0"+histroy_state_dict["STATES"][u]["create_state"]["owned_provinces"][i]).toString(16).padStart(6, '0').toUpperCase()
-                if (!colormap[histroy_state_dict["STATES"][u]["create_state"]["owned_provinces"][i]]){
-                    console.warn("Can not find: "+histroy_state_dict["STATES"][u]["create_state"]["owned_provinces"][i]+" in map! deleted.")
-                    histroy_state_dict["STATES"][u]["create_state"]["owned_provinces"] = histroy_state_dict["STATES"][u]["create_state"]["owned_provinces"].filter((items,index) => ![i].includes(index))
+            statecolormap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"]["country"]}`] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
+            for (let i =0;i<history_state_dict["STATES"][u]["create_state"]["owned_provinces"].length;i++){
+                history_state_dict["STATES"][u]["create_state"]["owned_provinces"][i] = "x"+parseInt("0"+history_state_dict["STATES"][u]["create_state"]["owned_provinces"][i]).toString(16).padStart(6, '0').toUpperCase()
+                if (!colormap[history_state_dict["STATES"][u]["create_state"]["owned_provinces"][i]]){
+                    console.warn("Can not find: "+history_state_dict["STATES"][u]["create_state"]["owned_provinces"][i]+" in map! deleted.")
+                    history_state_dict["STATES"][u]["create_state"]["owned_provinces"] = history_state_dict["STATES"][u]["create_state"]["owned_provinces"].filter((items,index) => ![i].includes(index))
                     continue
                 }
-                for (let j of colormap[histroy_state_dict["STATES"][u]["create_state"]["owned_provinces"][i]]){
-                    if (statepointmap[`${u}.region_state:${histroy_state_dict["STATES"][u]["create_state"]["country"]}`]){
-                        statepointmap[`${u}.region_state:${histroy_state_dict["STATES"][u]["create_state"]["country"]}`].push(j) 
-                    } else {statepointmap[`${u}.region_state:${histroy_state_dict["STATES"][u]["create_state"]["country"]}`] = [j]}
+                for (let j of colormap[history_state_dict["STATES"][u]["create_state"]["owned_provinces"][i]]){
+                    if (statepointmap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"]["country"]}`]){
+                        statepointmap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"]["country"]}`].push(j) 
+                    } else {statepointmap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"]["country"]}`] = [j]}
                 }
             }
             
         }
     }
-    postMessage({"correct_histroy_state_dict":histroy_state_dict})
+    postMessage({"correct_history_state_dict":history_state_dict})
     console.log(localization.correct_invalid_text)
 }
 

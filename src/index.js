@@ -44,12 +44,12 @@ export {full_data}
 var zoom_size = [1/4,1/2,1,2,3,4,5]
 var zoom_index = 2
 
-var pannelboard = document.getElementById('pannelboard')
-var select_info = pannelboard.querySelector(".pannel_top_right")
-var state_display_name = pannelboard.querySelector("#state_id")
-var country_display_name = pannelboard.querySelector("#country_id")
-var edit_pannelboard = document.getElementById('edit_pannelboard')
-var state_pannelboard = document.getElementById('state_pannelboard')
+var panelboard = document.getElementById('panelboard')
+var select_info = panelboard.querySelector(".panel_top_right")
+var state_display_name = panelboard.querySelector("#state_id")
+var country_display_name = panelboard.querySelector("#country_id")
+var edit_panelboard = document.getElementById('edit_panelboard')
+var state_panelboard = document.getElementById('state_panelboard')
 
 const gethexname = (r,g,b) => "x" + (r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0')).toUpperCase()
 
@@ -61,18 +61,18 @@ import { localization } from './i18n/i18n.js';
 
 var debug = await check_debug()
 
-var strategic_regions,state_regions,histroy_state,pops,buildings
+var strategic_regions,state_regions,history_state,pops,buildings
 
-var histroy_state_dict,state_regions_map,strategic_regions_map,pops_map,buildings_map
+var history_state_dict,state_regions_map,strategic_regions_map,pops_map,buildings_map
 var terrain_map
 if (!debug){
     strategic_regions = await get_file_dict("strategic_regions")
     state_regions = await get_file_dict("state_regions")
-    histroy_state = await get_file_dict("states")
+    history_state = await get_file_dict("states")
     pops = await get_file_dict("pops")
     buildings = await get_file_dict("buildings")
 
-    histroy_state_dict = get_dict_map(histroy_state,"STATES")
+    history_state_dict = get_dict_map(history_state,"STATES")
     state_regions_map = get_dict_map(state_regions)
     strategic_regions_map = get_dict_map(strategic_regions)
     pops_map = get_dict_map(pops,"POPS")
@@ -80,7 +80,7 @@ if (!debug){
 } else {
     strategic_regions_map = await get_text_dict("./data/outputs/02_strategic_regions.txt")
     state_regions_map = await get_text_dict("./data/outputs/01_state_regions.txt")
-    histroy_state_dict = await get_text_dict("./data/outputs/00_states.txt")
+    history_state_dict = await get_text_dict("./data/outputs/00_states.txt")
     pops_map = await get_text_dict("./data/outputs/05_pops.txt")
     buildings_map = await get_text_dict("./data/outputs/04_buildings.txt")
 }
@@ -104,7 +104,7 @@ for (let i=0;i<adjacencies.length;i++){
     }
 }
 
-var full_map_data = {histroy_state_dict,adj_pos,state_regions_map,strategic_regions_map,pops_map,buildings_map,terrain_map,
+var full_map_data = {history_state_dict,adj_pos,state_regions_map,strategic_regions_map,pops_map,buildings_map,terrain_map,
     strategic_data_lock,terrain_data_lock}
 export {full_map_data}
 
@@ -120,7 +120,7 @@ let string_worker = new Worker("src/workers/string_worker.js")
 let provid = []
 
 init_worker.onmessage = function(e) {
-    if (e.data["correct_histroy_state_dict"]) full_map_data.histroy_state_dict = e.data["correct_histroy_state_dict"]
+    if (e.data["correct_history_state_dict"]) full_map_data.history_state_dict = e.data["correct_history_state_dict"]
     else if(e.data["localiztion"]) {console.log(e.data["localiztion"])}
     else if (!e.data["ok"]) progress_text.textContent = e.data["data"]
     else {
@@ -172,7 +172,7 @@ img.onload =function(e){
         else location.reload()
     }
     init_worker.postMessage({localization})
-    init_worker.postMessage([reset_data,histroy_state_dict,canvas.width])
+    init_worker.postMessage([reset_data,history_state_dict,canvas.width])
     river_map.src = "./data/rivers.png"
 
 }
@@ -216,9 +216,9 @@ const canvas_select = function(e){
 
     label = gethexname(r,g,b)
 
-    let pannel_state_info = state_detail((y*canvas.width + x)*4)
-    state_display_name.value = pannel_state_info[0]
-    country_display_name.value = pannel_state_info[1]
+    let panel_state_info = state_detail((y*canvas.width + x)*4)
+    state_display_name.value = panel_state_info[0]
+    country_display_name.value = panel_state_info[1]
     
     if(city_select){
         canvas_city_select(label,x,y)
@@ -228,20 +228,20 @@ const canvas_select = function(e){
         select_prov_pure(imgdata,reset_data,label,(y*canvas.width + x)*4,provs_name,e)
         select_info.innerText = `${localization.select_provs}${provs_name.size}${localization.pieces}`
     } else if (mode == "state") {
-        if (!pannel_state_info[0])return
+        if (!panel_state_info[0])return
         select_states(imgdata,state_data,x,y,state_name,e)
         select_info.innerText = `${localization.select_states}${state_name.size}${localization.pieces}`
-        // state_detail_edit(pannel_state_info)
-        // state_pops_edit(pannel_state_info)
-        handle_state_edit(pannel_state_info)
+        // state_detail_edit(panel_state_info)
+        // state_pops_edit(panel_state_info)
+        handle_state_edit(panel_state_info)
     } else if (mode == "edit"){
         select_provs(imgdata,state_data,label,(y*canvas.width + x)*4,provs_name,e)
         select_info.innerText = `${localization.select_provs}${provs_name.size}${localization.pieces}`
     } else if (mode == "strategic"){
-        if (!pannel_state_info[0])return
+        if (!panel_state_info[0])return
         for(let j=0,keys=Object.keys(full_map_data.strategic_regions_map),len=keys.length;j<len;j++){
             let region = keys[j]
-            if (full_map_data.strategic_regions_map[region]["states"].indexOf(pannel_state_info[0].replace("s:",""))>-1){
+            if (full_map_data.strategic_regions_map[region]["states"].indexOf(panel_state_info[0].replace("s:",""))>-1){
                 document.getElementById("strategic_name_input").value = region
                 if (full_map_data.strategic_regions_map[region]["graphical_culture"]) 
                     document.getElementById("culture_name_input").value = full_map_data.strategic_regions_map[region]["graphical_culture"]
@@ -307,7 +307,7 @@ const state_detail = (sindex,interfacer=()=>{}) =>{
 
 export {state_detail}
 
-import {handle_state_edit} from "./pannel/state_pannel.js"
+import {handle_state_edit} from "./panel/state_panel.js"
 
 canvas.onclick = canvas_select
 canvas.onmouseover = province_detail
@@ -323,14 +323,14 @@ document.getElementById("convert_strategy").addEventListener("click",function(e)
 })
 
 
-let prov_pannelboard = document.getElementById("prov_pannelboard")
-let strategic_pannelboard = document.getElementById("strategic_pannelboard")
-let pannelboards = [edit_pannelboard,state_pannelboard,prov_pannelboard,strategic_pannelboard]
-const show_pannelboard = (e) => {
-    for (let i=0;i<pannelboards.length;i++){
-        if (pannelboards[i] == e){
-            pannelboards[i].style.display="block";
-        } else pannelboards[i].style.display="none";
+let prov_panelboard = document.getElementById("prov_panelboard")
+let strategic_panelboard = document.getElementById("strategic_panelboard")
+let panelboards = [edit_panelboard,state_panelboard,prov_panelboard,strategic_panelboard]
+const show_panelboard = (e) => {
+    for (let i=0;i<panelboards.length;i++){
+        if (panelboards[i] == e){
+            panelboards[i].style.display="block";
+        } else panelboards[i].style.display="none";
     }
 
 }
@@ -345,27 +345,27 @@ mode_selection.addEventListener("change",function(e){
 const mode_render = (mode) => {
     switch (mode){
         case "prov":
-            show_pannelboard(prov_pannelboard)
+            show_panelboard(prov_panelboard)
             ctx.putImageData(reset_data, 0, 0);
             break
         case "state":
-            show_pannelboard(state_pannelboard)
+            show_panelboard(state_panelboard)
             state_mode(); 
             break
         case "edit":
-            show_pannelboard(edit_pannelboard)
+            show_panelboard(edit_panelboard)
             state_mode(); 
             break
         case "strategic":
-            show_pannelboard(strategic_pannelboard)
+            show_panelboard(strategic_panelboard)
             strategic_mode();
             break
         case "terrain":
-            show_pannelboard(null)
+            show_panelboard(null)
             terrain_mode();
             break
         case "country":
-            show_pannelboard(null)
+            show_panelboard(null)
             country_mode();
             break
         
@@ -373,7 +373,7 @@ const mode_render = (mode) => {
 }
 
 document.getElementById('state_edit_city').addEventListener("change",function(e){city_select_type=e.target.value})
-document.getElementById('state_pannelboard').querySelector("button").addEventListener("click",function(e){
+document.getElementById('state_panelboard').querySelector("button").addEventListener("click",function(e){
     city_select=true
     city_select_type = document.getElementById('state_edit_city').value
 })

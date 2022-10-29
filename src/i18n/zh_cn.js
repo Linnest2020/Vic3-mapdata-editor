@@ -21,7 +21,7 @@ let localization = {
     save:"保存",
     start_edit:"开始编辑",
     convert:"转换",
-    panneltop:"编辑栏",
+    paneltop:"编辑栏",
 
     river_draw:"显示河流",
     city_draw:"显示城市",

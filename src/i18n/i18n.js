@@ -17,8 +17,8 @@ document.getElementById("progress").innerText = localization.init_load
 document.getElementById("save").innerText = localization.save
 document.getElementById("convert").innerText = localization.convert
 document.getElementById("convert_strategy").innerText = localization.convert
-document.getElementById("state_pannelboard").querySelector("button").innerText = localization.start_edit
-document.querySelector("span.pannel_top").innerText = localization.panneltop
+document.getElementById("state_panelboard").querySelector("button").innerText = localization.start_edit
+document.querySelector("span.panel_top").innerText = localization.paneltop
 
 document.querySelector("[for=city_draw]").innerText = localization.city_draw
 document.querySelector("[for=river_draw]").innerText = localization.river_draw

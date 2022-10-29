@@ -41,7 +41,7 @@ export {handle_state_edit}
 
 
 const state_detail_edit = (info) => {
-    let state_detail = full_map_data.histroy_state_dict["STATES"][info[0]]
+    let state_detail = full_map_data.history_state_dict["STATES"][info[0]]
     let state_public_detail = {}
     let state_split_detail = {}
     let state_private_detail = {}

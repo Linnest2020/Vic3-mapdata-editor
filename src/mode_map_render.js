@@ -7,7 +7,7 @@ import { localization } from "./i18n/i18n.js";
 const strategic_mode = () => {
     // console.log(jomini.parseText("color = hsv{ 0.99  0.7  0.9 }"))
     full_data.mode = "strategic"
-    pannelboard.style.display = "block"
+    panelboard.style.display = "block"
     if (!full_data.strategic_data || !full_map_data.strategic_data_lock){
         full_data.ctx.putImageData(full_data.state_data, 0, 0)
         let imgdata = full_data.ctx.getImageData(0, 0, canvas.width, canvas.height)
@@ -21,12 +21,12 @@ const strategic_mode = () => {
     
             let colorful_states = []
             for (let j=0,map_key=full_map_data.strategic_regions_map[keys[i]]["states"],map_len=map_key.length;j<map_len;j++){
-                if (full_map_data.histroy_state_dict["STATES"]["s:"+map_key[j]]) {
-                    if (!(full_map_data.histroy_state_dict["STATES"]["s:"+map_key[j]]["create_state"] instanceof Array)){
-                        colorful_states.push(`s:${map_key[j]}.region_state:${full_map_data.histroy_state_dict["STATES"]["s:"+map_key[j]]["create_state"]["country"]}`)
+                if (full_map_data.history_state_dict["STATES"]["s:"+map_key[j]]) {
+                    if (!(full_map_data.history_state_dict["STATES"]["s:"+map_key[j]]["create_state"] instanceof Array)){
+                        colorful_states.push(`s:${map_key[j]}.region_state:${full_map_data.history_state_dict["STATES"]["s:"+map_key[j]]["create_state"]["country"]}`)
                     } else {
-                        for (let k=0;k<full_map_data.histroy_state_dict["STATES"]["s:"+map_key[j]]["create_state"].length;k++){
-                            colorful_states.push(`s:${map_key[j]}.region_state:${full_map_data.histroy_state_dict["STATES"]["s:"+map_key[j]]["create_state"][k]["country"]}`)
+                        for (let k=0;k<full_map_data.history_state_dict["STATES"]["s:"+map_key[j]]["create_state"].length;k++){
+                            colorful_states.push(`s:${map_key[j]}.region_state:${full_map_data.history_state_dict["STATES"]["s:"+map_key[j]]["create_state"][k]["country"]}`)
                         }
                     }
                 }
@@ -56,7 +56,7 @@ const strategic_mode = () => {
 let country_color = {}
 
 const country_mode = () => {
-    pannelboard.style.display = "block"
+    panelboard.style.display = "block"
     full_data.ctx.putImageData(full_data.state_data, 0, 0)
     let img_data = full_data.ctx.getImageData(0,0,canvas.width,canvas.height)
 
@@ -79,7 +79,7 @@ const country_mode = () => {
 }
 
 const state_mode = () => {
-    pannelboard.style.display = "block"
+    panelboard.style.display = "block"
     full_data.ctx.putImageData(full_data.state_data, 0, 0)
     do_draw()
 }
@@ -103,7 +103,7 @@ terrain_worker.onmessage = function(e) {
 
 
 const terrain_mode = () => {
-    pannelboard.style.display = "block"
+    panelboard.style.display = "block"
     if (!full_data.terrain_data || !full_map_data.terrain_data_lock){
         // document.getElementById("mask").style.display = "block"
         // document.getElementById('progress').style.display = "block"

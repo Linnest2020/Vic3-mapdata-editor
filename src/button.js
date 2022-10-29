@@ -6,9 +6,9 @@ let convert_button = document.getElementById("convert")
 
 dump_button.onclick = async function(e) {
     
-    let histroy_state_write = jomini.write(
+    let history_state_write = jomini.write(
         (writer) => {
-            justwrite(writer,full_map_data.histroy_state_dict,["add_claim","create_state","state_type","add_homeland"],[])
+            justwrite(writer,full_map_data.history_state_dict,["add_claim","create_state","state_type","add_homeland"],[])
         }
     )
     
@@ -48,7 +48,7 @@ dump_button.onclick = async function(e) {
             body: JSON.stringify({
                 "src":"outputs",
                 "data":{
-                    "00_states.txt":new TextDecoder().decode(histroy_state_write),
+                    "00_states.txt":new TextDecoder().decode(history_state_write),
                     "01_state_regions.txt":new TextDecoder().decode(state_regions_map_write),
                     "02_strategic_regions.txt":new TextDecoder().decode(strategic_regions_map_write),
                     "04_buildings.txt":new TextDecoder().decode(buildings_map_write),

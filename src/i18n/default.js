@@ -21,7 +21,7 @@ let localization = {
     save:"SAVE",
     start_edit:"start edit",
     convert:"CONVERT",
-    panneltop:"EDIT PANNEL",
+    paneltop:"EDIT panel",
 
     river_draw:"show river",
     city_draw:"show cities",
