@@ -5,28 +5,42 @@ const wasmUrl = "/src/jomini/jomini.wasm";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 let progress_text = document.getElementById("progress") as HTMLDivElement;
-let prov_pannelboard = document.getElementById(
-    "prov_pannelboard"
+let prov_pa
+nelboard = document.getElementById(
+    "prov_pa
+    nelboard"
 ) as HTMLDivElement;
-let strategic_pannelboard = document.getElementById(
-    "strategic_pannelboard"
+let strategic_pa
+nelboard = document.getElementById(
+    "strategic_pa
+    nelboard"
 ) as HTMLDivElement;
 let tip = document.getElementById("output") as HTMLSpanElement;
-let pannelboard = document.getElementById("pannelboard") as HTMLDivElement;
-let select_info = pannelboard.querySelector(
-    ".pannel_top_right"
+let pa
+nelboard = document.getElementById("pa
+nelboard") as HTMLDivElement;
+let select_info = pa
+nelboard.querySelector(
+    ".pa
+    nel_top_right"
 ) as HTMLSpanElement;
-let state_display_name = pannelboard.querySelector(
+let state_display_name = pa
+nelboard.querySelector(
     "#state_id"
 ) as HTMLInputElement;
-let country_display_name = pannelboard.querySelector(
+let country_display_name = pa
+nelboard.querySelector(
     "#country_id"
 ) as HTMLInputElement;
-let edit_pannelboard = document.getElementById(
-    "edit_pannelboard"
+let edit_pa
+nelboard = document.getElementById(
+    "edit_pa
+    nelboard"
 ) as HTMLDivElement;
-let state_pannelboard = document.getElementById(
-    "state_pannelboard"
+let state_pa
+nelboard = document.getElementById(
+    "state_pa
+    nelboard"
 ) as HTMLDivElement;
 let mask = document.getElementById("mask") as HTMLDivElement;
 
@@ -309,9 +323,12 @@ const canvas_select = function (this: any, e: MouseEvent) {
 
     label = gethexname(r, g, b);
 
-    let pannel_state_info = state_detail((y * canvas.width + x) * 4);
-    state_display_name.value = pannel_state_info[0];
-    country_display_name.value = pannel_state_info[1];
+    let pa
+    nel_state_info = state_detail((y * canvas.width + x) * 4);
+    state_display_name.value = pa
+    nel_state_info[0];
+    country_display_name.value = pa
+    nel_state_info[1];
 
     if (city_select) {
         canvas_city_select(label, x, y);
@@ -328,12 +345,16 @@ const canvas_select = function (this: any, e: MouseEvent) {
         );
         select_info.innerText = `${localization.select_provs}${provs_name.size}${localization.pieces}`;
     } else if (mode == "state") {
-        if (!pannel_state_info[0]) return;
+        if (!pa
+            nel_state_info[0]) return;
         select_states(imgdata, state_data, x, y, state_name, e);
         select_info.innerText = `${localization.select_states}${state_name.size}${localization.pieces}`;
-        // state_detail_edit(pannel_state_info)
-        // state_pops_edit(pannel_state_info)
-        handle_state_edit(pannel_state_info);
+        // state_detail_edit(pa
+        nel_state_info)
+        // state_pops_edit(pa
+        nel_state_info)
+        handle_state_edit(pa
+            nel_state_info);
     } else if (mode == "edit") {
         select_provs(
             imgdata,
@@ -345,7 +366,8 @@ const canvas_select = function (this: any, e: MouseEvent) {
         );
         select_info.innerText = `${localization.select_provs}${provs_name.size}${localization.pieces}`;
     } else if (mode == "strategic") {
-        if (!pannel_state_info[0]) return;
+        if (!pa
+            nel_state_info[0]) return;
         for (
             let j = 0,
                 keys = Object.keys(full_map_data.strategic_regions_map),
@@ -356,7 +378,8 @@ const canvas_select = function (this: any, e: MouseEvent) {
             let region = keys[j];
             if (
                 full_map_data.strategic_regions_map[region]["states"].indexOf(
-                    pannel_state_info[0].replace("s:", "")
+                    pa
+                    nel_state_info[0].replace("s:", "")
                 ) > -1
             ) {
                 strategic_name_input.value = region;
@@ -439,7 +462,7 @@ const state_detail = (sindex: number, interfacer = () => {}) => {
 
 export { state_detail };
 
-import { handle_state_edit } from "./pannel/state_pannel.js";
+import { handle_state_edit } from "./panel/state_panel.js";
 
 canvas.onclick = canvas_select;
 canvas.onmouseover = province_detail;
@@ -464,17 +487,27 @@ convert_strategy_btn.addEventListener("click", function (e) {
     update_strategy(state_name);
 });
 
-let pannelboards = [
-    edit_pannelboard,
-    state_pannelboard,
-    prov_pannelboard,
-    strategic_pannelboard,
+let pa
+nelboards = [
+    edit_pa
+    nelboard,
+    state_pa
+    nelboard,
+    prov_pa
+    nelboard,
+    strategic_pa
+    nelboard,
 ];
-const show_pannelboard = (e: HTMLDivElement | null) => {
-    for (let i = 0; i < pannelboards.length; i++) {
-        if (pannelboards[i] == e) {
-            pannelboards[i].style.display = "block";
-        } else pannelboards[i].style.display = "none";
+const show_pa
+nelboard = (e: HTMLDivElement | null) => {
+    for (let i = 0; i < pa
+        nelboards.length; i++) {
+        if (pa
+            nelboards[i] == e) {
+            pa
+            nelboards[i].style.display = "block";
+        } else pa
+        nelboards[i].style.display = "none";
     }
 };
 
@@ -491,27 +524,37 @@ mode_selection.addEventListener("change", function (e) {
 const mode_render = (mode: string) => {
     switch (mode) {
         case "prov":
-            show_pannelboard(prov_pannelboard);
+            show_pa
+            nelboard(prov_pa
+                nelboard);
             ctx.putImageData(reset_data, 0, 0);
             break;
         case "state":
-            show_pannelboard(state_pannelboard);
+            show_pa
+            nelboard(state_pa
+                nelboard);
             state_mode();
             break;
         case "edit":
-            show_pannelboard(edit_pannelboard);
+            show_pa
+            nelboard(edit_pa
+                nelboard);
             state_mode();
             break;
         case "strategic":
-            show_pannelboard(strategic_pannelboard);
+            show_pa
+            nelboard(strategic_pa
+                nelboard);
             strategic_mode();
             break;
         case "terrain":
-            show_pannelboard(null);
+            show_pa
+            nelboard(null);
             // terrain_mode();
             break;
         case "country":
-            show_pannelboard(null);
+            show_pa
+            nelboard(null);
             country_mode();
             break;
     }
@@ -520,7 +563,8 @@ const mode_render = (mode: string) => {
 let state_edit_city = document.getElementById(
     "state_edit_city"
 ) as HTMLSelectElement;
-let state_edit_city_btn = state_pannelboard.querySelector(
+let state_edit_city_btn = state_pa
+nelboard.querySelector(
     "button"
 ) as HTMLButtonElement;
 state_edit_city.addEventListener("change", function (e) {

@@ -5,7 +5,7 @@ import { localization } from "../i18n/i18n.js";
 
 let state_public = document.getElementById("state_public") as HTMLDivElement;
 let state_private = document.getElementById("state_private") as HTMLDivElement;
-let pannel = document.getElementById("pannelboard") as HTMLDivElement;
+let panel = document.getElementById("panelboard") as HTMLDivElement;
 let more_info = document.getElementById("state_more_info") as HTMLDivElement;
 
 let mode = "detail";
@@ -236,7 +236,7 @@ const draw_state_detail = (
 
 const state_pops_edit = (info) => {
     let info_detail = "region_state:" + info[1].replace("c:", "");
-    pannel.style.maxWidth = "45%";
+    panel.style.maxWidth = "45%";
     console.log(full_map_data.pops_map);
     if (!full_map_data.pops_map["POPS"][info[0]])
         full_map_data.pops_map["POPS"][info[0]] = {
@@ -459,7 +459,7 @@ const draw_pop_detail = (
 
 const state_building_edit = (info) => {
     let info_detail = "region_state:" + info[1].replace("c:", "");
-    pannel.style.maxWidth = "45%";
+    panel.style.maxWidth = "45%";
     console.log(full_map_data.buildings_map["BUILDINGS"]);
     if (!full_map_data.buildings_map["BUILDINGS"][info[0]])
         full_map_data.buildings_map["BUILDINGS"][info[0]] = {
@@ -1002,7 +1002,7 @@ const draw_resource_detail = (key, akey, un, max, data, index = 0) => {
 };
 
 const state_resource_edit = (info) => {
-    pannel.style.maxWidth = "45%";
+    panel.style.maxWidth = "45%";
     let state_detail =
         full_map_data.state_regions_map[info[0].replace("s:", "")];
     state_public.innerHTML = `<p>${info[0]}.region_state:${info[1].replace(

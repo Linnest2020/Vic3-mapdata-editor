@@ -51,7 +51,7 @@ canvas {
     color: #fff;
 }
 
-.pannelboard {
+.panelboard {
     max-width: 45%;
     height: 50%;
     z-index: 1000;
@@ -65,7 +65,7 @@ canvas {
 }
 
 
-.pannelboard .pannel_top {
+.panelboard .panel_top {
     position: relative;
     z-index: 1200;
     top: 0;
@@ -76,7 +76,7 @@ canvas {
     line-height: 40px;
 }
 
-.pannelboard .pannel_top_right {
+.panelboard .panel_top_right {
     position: relative;
     z-index: 1200;
     float:right;
@@ -88,11 +88,11 @@ canvas {
     line-height: 40px;
 }
 
-.pannelboard div {
+.panelboard div {
     margin-left:10px ;
 }
 
-.pannelboard input {
+.panelboard input {
     position: relative;
     z-index: 1200;
 
@@ -104,57 +104,57 @@ canvas {
     line-height: 40px;
 }
 
-.pannelboard button {
+.panelboard button {
     margin-top: 10px;
     margin-left: 10px;
 }
 
-.pannelboard input.key_input {
+.panelboard input.key_input {
     width: 30%;
     margin-right: 5px;
 }
 
-.pannelboard input.value_input {
+.panelboard input.value_input {
     width: 27%;
     margin-left: 5px;
     margin-right: 5px;
 }
 
 
-.pannelboard input.r_input {
+.panelboard input.r_input {
     width: 15%;
     margin-left: 0px;
     margin-right: 0px;
 }
 
-.pannelboard input.cu_input {
+.panelboard input.cu_input {
     width: 20%;
     margin-left: 0px;
     margin-right: 5px;
 }
 
-.pannelboard input.pt_input {
+.panelboard input.pt_input {
     width: 20%;
     margin-left: 0px;
     margin-right: 5px;
 }
 
-.pannelboard input.lv_input {
+.panelboard input.lv_input {
     width: 10%;
     margin-left: 5px;
     margin-right: 5px;
 }
 
-.pannelboard div.state_property{
+.panelboard div.state_property{
     margin-left: 0px;
 }
 
-.pannelboard div.state_property_flow{
+.panelboard div.state_property_flow{
     overflow:auto;
     height: 400px;
 }
 
-.pannelboard .btn-adjustment{
+.panelboard .btn-adjustment{
     margin-left: 0px;
 }
 
@@ -179,12 +179,12 @@ canvas {
     height: 10%;
 }
 
-.pannelboard input.key_resource_input {
+.panelboard input.key_resource_input {
     width: 25%;
     margin-right: 0px;
 }
 
-.pannelboard input.pico_input {
+.panelboard input.pico_input {
     width: 5%;
     margin-right: 0px;
 }
@@ -203,14 +203,14 @@ canvas {
     /* box-shadow: 0 2px 8px rgb(30, 30, 30); */
 }
 
-#prov_pannelboard button{
+#prov_panelboard button{
     height: 25px;
     width: 30px;
     margin: 0;
     border: 0px;
 }
 
-#prov_pannelboard input{
+#prov_panelboard input{
     width: 60px;
 }
 

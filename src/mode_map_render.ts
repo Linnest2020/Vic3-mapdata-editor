@@ -4,12 +4,12 @@ import { get_text_dict } from "./init_utils.js";
 import { localization } from "./i18n/i18n.js";
 
 let canvas = document.getElementById("canvas") as HTMLCanvasElement;
-let pannelboard = document.getElementById("pannelboard") as HTMLDivElement;
+let panelboard = document.getElementById("panelboard") as HTMLDivElement;
 
 const strategic_mode = () => {
     // console.log(jomini.parseText("color = hsv{ 0.99  0.7  0.9 }"))
     full_data.mode = "strategic";
-    pannelboard.style.display = "block";
+    panelboard.style.display = "block";
     if (!full_data.strategic_data || !full_map_data.strategic_data_lock) {
         full_data.ctx.putImageData(full_data.state_data, 0, 0);
         let imgdata = full_data.ctx.getImageData(
@@ -119,7 +119,7 @@ const strategic_mode = () => {
 let country_color: { [key: string]: [number, number, number] } = {};
 
 const country_mode = () => {
-    pannelboard.style.display = "block";
+    panelboard.style.display = "block";
     full_data.ctx.putImageData(full_data.state_data, 0, 0);
     let img_data = full_data.ctx.getImageData(
         0,
@@ -167,7 +167,7 @@ const country_mode = () => {
 };
 
 const state_mode = () => {
-    pannelboard.style.display = "block";
+    panelboard.style.display = "block";
     full_data.ctx.putImageData(full_data.state_data, 0, 0);
     do_draw();
 };
@@ -197,7 +197,7 @@ terrain_worker.onmessage = function (e) {
 let terrain_map;
 
 const terrain_mode = () => {
-    pannelboard.style.display = "block";
+    panelboard.style.display = "block";
     if (!full_data.terrain_data || !full_map_data.terrain_data_lock) {
         mask.style.display = "block";
         progress.style.display = "block";
