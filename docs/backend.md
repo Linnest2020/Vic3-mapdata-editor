@@ -6,7 +6,7 @@ Get local file
 
 ## /upload `GET`
 
-Get all documents from directory "src"
+Get all documents from directory "src" by query string
 
 ## /upload `POST`
 
@@ -25,7 +25,7 @@ Upload
 
 ## /debug `GET`
 
-Check if debug mode is active
+Check if debug mode is active, determined by if you select "Debug" in system tray
 
 ```
     {
@@ -35,4 +35,4 @@ Check if debug mode is active
 
 ## /debug `POST`
 
-If debug is false, make it true, vice versa
+Toggle the debug to make debug mode activated.
