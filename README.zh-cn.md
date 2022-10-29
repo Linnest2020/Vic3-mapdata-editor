@@ -15,11 +15,11 @@ Vic3 mapdata editor 是基于[Jomini](https://github.com/nickbabcock/jomini)的,
 ## TODO
 
 -   更流畅的国家模式显示（且不加载更多的文件）
--   显示性能优化，修复 CROS 的固有 bug
+-   显示性能优化，修复 [CROS](https://github.com/Linnest2020/Vic3-mapdata-editor/pull/2#issuecomment-1293482034) 的固有 bug
 -   可视化编辑 adjacencies
 -   实时可视化编辑城市地块
 -   完全的上传至网络服务器并 docker 化
--   Typescript 化？
+-   [Typescript 化？](https://github.com/Linnest2020/Vic3-mapdata-editor/tree/typescript)
 -   友好的自动补全
 -   友好的使用文档和开发者文档
 -   放大和缩小(不开玩笑，这个真的很难弄)
@@ -34,7 +34,7 @@ Vic3 mapdata editor 是基于[Jomini](https://github.com/nickbabcock/jomini)的,
 -   outputs: 存放输出文件的文件夹,初始时应当留空
 -   pops: 将`game/common/history/pops`的所有文件放到这里
 -   state_regions: 将`game/map_data/state_regions`的所有文件放到这里
--   strategic_regions: 将`game/map_data/strategic_regions`的所有文件放到这里
+-   strategic_regions: 将`game/common/history/strategic_regions`的所有文件放到这里
 -   states: 将`game/common/history/states`的所有文件放到这里
 -   adjacencies.csv: 将`game/map_data`的同名文件放到这里
 -   provinces.png: 将`game/map_data`的同名文件放到这里
@@ -58,31 +58,33 @@ Vic3 mapdata editor 是基于[Jomini](https://github.com/nickbabcock/jomini)的,
 最后你会在`data/outputs` 找到一系列文件, 这些文件应当在 mod 文件夹里,也就是你创建的文件夹里替换掉原版的文件
 
 在`.metadata/metadata.json`中
+
 ```json
 {
-  "name" : "Yourmod",
-  "id" : "your.mod",
-  "version" : "0.01",
-  "supported_game_version" : "",
-  "short_description" : "",
-  "tags" : ["funny modding"],
-  "relationships" : [],
-  "game_custom_data" : {
-    "multiplayer_synchronized" : true,
-    "replace_paths": [
-      "common/history/states",
-      "common/history/pops",
-      "common/history/buildings",
-      "map_data/state_regions",
-      "common/strategic_regions"
-    ]
-  }
+    "name": "Yourmod",
+    "id": "your.mod",
+    "version": "0.01",
+    "supported_game_version": "",
+    "short_description": "",
+    "tags": ["funny modding"],
+    "relationships": [],
+    "game_custom_data": {
+        "multiplayer_synchronized": true,
+        "replace_paths": [
+            "common/history/states",
+            "common/history/pops",
+            "common/history/buildings",
+            "map_data/state_regions",
+            "common/strategic_regions"
+        ]
+    }
 }
 ```
 
-在你的mod 的文件夹的对应文件夹里均只有一个文件, 分别是
-+ common/history/states/00_states.txt
-+ map_data/state_regions/01_state_regions.txt
-+ common/strategic_regions/02_strategic_regions.txt
-+ common/history/buildings/04_buildings.txt
-+ common/history/pops/05_pops.txt
+在你的 mod 的文件夹的对应文件夹里均只有一个文件, 分别是
+
+-   common/history/states/00_states.txt
+-   map_data/state_regions/01_state_regions.txt
+-   common/strategic_regions/02_strategic_regions.txt
+-   common/history/buildings/04_buildings.txt
+-   common/history/pops/05_pops.txt

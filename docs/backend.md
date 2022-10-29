@@ -1,11 +1,17 @@
+\*Read this in other languages: [English](backend.md), [简体中文](backend.zh-cn.md)
+
 ## / `GET`
-返回本地文件
+
+Get local file
 
 ## /upload `GET`
-通过查询字符串src返回文件夹中的所有文件
+
+Get all documents from directory "src"
 
 ## /upload `POST`
-上传
+
+Upload
+
 ```
 	{
 	 	"src": "src",
@@ -16,8 +22,11 @@
 	 }
 
 ```
+
 ## /debug `GET`
-返回,debug值视是否在菜单中选择调试
+
+Check if debug mode is active
+
 ```
     {
         "debug":true
@@ -25,4 +34,5 @@
 ```
 
 ## /debug `POST`
-如果debug为false设置为true,反之亦然
+
+If debug is false, make it true, vice versa
