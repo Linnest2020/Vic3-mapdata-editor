@@ -101,30 +101,32 @@ terrain_worker.onmessage = function(e) {
     }
 }
 
-let terrain_map
 
 const terrain_mode = () => {
     pannelboard.style.display = "block"
     if (!full_data.terrain_data || !full_map_data.terrain_data_lock){
-        document.getElementById("mask").style.display = "block"
-        document.getElementById('progress').style.display = "block"
-        if (!full_map_data.terrain_map){
-            document.getElementById('progress').textContent = localization.reading_terrain_map
-            get_text_dict("./data/province_terrains.txt").then(res => {full_map_data.terrain_map = res})
-            document.getElementById('progress').textContent = localization.read_terrain_map_finnish
-        }
+        // document.getElementById("mask").style.display = "block"
+        // document.getElementById('progress').style.display = "block"
+        // if (!full_map_data.terrain_map){
+        //     document.getElementById('progress').textContent = localization.reading_terrain_map
+        //     get_text_dict("./data/province_terrains.txt").then(res => {full_map_data.terrain_map = res})
+        //     document.getElementById('progress').textContent = localization.read_terrain_map_finnish
+        // }
+                
         
 
-        terrain_worker.postMessage({localization})
-        terrain_worker.postMessage({
-            colormap:full_data.colormap,
-            img_data:full_data.state_data,
-            terrain_map:full_map_data.terrain_map
+        // terrain_worker.postMessage({localization})
+        // terrain_worker.postMessage({
+        //     colormap:full_data.colormap,
+        //     img_data:full_data.state_data,
+        //     terrain_map:full_map_data.terrain_map
 
-        })
-
+        // })
+        
     
         full_data.ctx.putImageData(full_data.state_data, 0, 0)
+        full_data.terrain_data = render_terrain_data(full_data.state_data,full_data.colormap)
+        full_data.ctx.putImageData(full_data.terrain_data, 0, 0)
         
         full_map_data.terrain_data_lock = true
     }
@@ -132,6 +134,45 @@ const terrain_mode = () => {
         full_data.ctx.putImageData(full_data.terrain_data, 0, 0)
     }
     
+}
+
+let terrain_color = {
+    desert: [255,255,0],
+    plains: [0,255,0],
+    wetland: [218,112,214],
+    mountain: [255,125,64],
+    ocean:[0,0,255],
+    lakes:[0,255,255],
+    snow:[255,255,255],
+    tundra:[255,192,203],
+    savanna:[210,180,140],
+    jungle:[0,255,127],
+    hills:[188,143,143],
+    forest:[61,145,64],
+    
+}
+
+const render_terrain_data = (img_data,colormap) => {
+    let terrain_map = full_map_data.terrain_map
+    for ( let u=0,len=Object.keys(terrain_map).length;u<len;u++){
+        let terrain = Object.keys(terrain_map)[u]
+        let terrain_provs = terrain_map[terrain]
+        if (!terrain_color[terrain]){
+            terrain_color[terrain] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]     
+            console.log(terrain,terrain_color[terrain])
+        }
+        for (let j=0,jlen=terrain_provs.length;j<jlen;j++){
+            let provpoint = terrain_provs[j]
+            for (let n = 0,nlen=colormap[provpoint].length;n < nlen;n++){
+                if (img_data.data[colormap[provpoint][n]]+img_data.data[colormap[provpoint][n]+1]+img_data.data[colormap[provpoint][n]+2]==0) continue
+                img_data.data[colormap[provpoint][n]] = terrain_color[terrain][0]
+                img_data.data[colormap[provpoint][n]+1] = terrain_color[terrain][1]
+                img_data.data[colormap[provpoint][n]+2] = terrain_color[terrain][2]
+            }
+        }
+    }
+
+    return img_data
 }
 
 

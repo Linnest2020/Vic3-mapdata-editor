@@ -46,4 +46,25 @@ const get_csv = async (csv) =>{
     return data
 }
 
-export {get_dict_map,get_text_dict,get_file_dict,get_csv,check_debug}
+const get_terrain_dict = (buffer) => {
+        let terrainarr = buffer.split("\n")
+        let data = {}
+        let provid = []
+        for (let i=1,len=terrainarr.length;i<len;i++){
+            let [provname,terrain] = terrainarr[i].split("=")
+            if (provname) {
+                provname = provname.replaceAll("\"","")
+                terrain = terrain.replaceAll("\"","")
+                provid.push(provname)
+                if (data[terrain]) data[terrain].push(provname)
+                else data[terrain] = [provname]
+            }
+
+        }
+        return [data,provid]
+    }
+
+
+
+
+export {get_dict_map,get_text_dict,get_file_dict,get_csv,check_debug,get_terrain_dict}

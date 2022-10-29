@@ -56,7 +56,7 @@ const gethexname = (r,g,b) => "x" + (r.toString(16).padStart(2, '0') + g.toStrin
 const jomini = await Jomini.initialize({ wasm: wasmUrl })
 
 export {canvas,jomini}
-import {get_dict_map,get_file_dict,get_csv,check_debug,get_text_dict} from "./init_utils.js"
+import {get_dict_map,get_file_dict,get_csv,check_debug,get_text_dict,get_terrain_dict} from "./init_utils.js"
 import { localization } from './i18n/i18n.js';
 
 var debug = await check_debug()
@@ -117,6 +117,8 @@ canvas.height = img.height;
 let init_worker = new Worker("src/workers/init_worker.js")
 let string_worker = new Worker("src/workers/string_worker.js")
 
+let provid = []
+
 init_worker.onmessage = function(e) {
     if (e.data["correct_histroy_state_dict"]) full_map_data.histroy_state_dict = e.data["correct_histroy_state_dict"]
     else if(e.data["localiztion"]) {console.log(e.data["localiztion"])}
@@ -135,6 +137,23 @@ init_worker.onmessage = function(e) {
         full_data.state_data = state_data
         
         // get_text_dict("./data/province_terrains.txt").then(res => {full_map_data.terrain_map = res})
+
+        fetch("./data/province_terrains.txt").then((resp) => {
+            if (!resp.ok){
+                throw new Error("404")
+            } else {
+                let get_text = resp.text()
+                get_text.then(
+                    buffer => {
+                        [full_map_data.terrain_map,provid] = get_terrain_dict(buffer)
+                    }
+                )                
+            }
+        }).catch((err) => { 
+            console.log("")
+            mode_selection.querySelector("option[value='terrain']").disabled = true
+        })
+
         document.getElementById("mask").style.display = "none"
 
         init_worker.terminate()
@@ -316,8 +335,8 @@ const show_pannelboard = (e) => {
 
 }
 
-
-document.getElementById("mode_selection").addEventListener("change",function(e){
+let mode_selection = document.getElementById("mode_selection")
+mode_selection.addEventListener("change",function(e){
     mode = e.target.value
     mode_render(mode)
 })
@@ -343,7 +362,7 @@ const mode_render = (mode) => {
             break
         case "terrain":
             show_pannelboard(null)
-            // terrain_mode();
+            terrain_mode();
             break
         case "country":
             show_pannelboard(null)

@@ -42,6 +42,39 @@ const render_terrain_data = (img_data,data) => {
     let nowprogress = 0
     let time = new Date().valueOf()
     for ( let u=0,len=Object.keys(terrain_map).length;u<len;u++){
+        let terrain = Object.keys(terrain_map)[u]
+        let terrain_provs = terrain_map[terrain]
+        if (!terrain_color[terrain]){
+            terrain_color[terrain] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]     
+            console.log(terrain,terrain_color[terrain])
+        }
+        for (let j=0,jlen=terrain_provs.length;j<jlen;j++){
+            let progress = (j/jlen)*100
+            let provpoint = terrain_provs[j]
+            if (progress >= nowprogress){
+                nowprogress = progress + 0.1
+                postMessage({"data":`${localization.loading_terrain}${nowprogress.toFixed(2)}%`})
+                
+                if (nowprogress >= 99.90){
+                    console.log(`${localization.load_terrian_fin}: ${new Date().valueOf() - time}s`)
+                }
+            }
+            for (let n = 0,nlen=data.colormap[provpoint].length;n < nlen;n++){
+                if (img_data.data[data.colormap[provpoint][n]]+img_data.data[data.colormap[provpoint][n]+1]+img_data.data[data.colormap[provpoint][n]+2]==0) continue
+                img_data.data[data.colormap[provpoint][n]] = terrain_color[terrain][0]
+                img_data.data[data.colormap[provpoint][n]+1] = terrain_color[terrain][1]
+                img_data.data[data.colormap[provpoint][n]+2] = terrain_color[terrain][2]
+            }
+        }
+    }
+
+    return img_data
+}
+
+const render_terrain_data_old = (img_data,data) => {
+    let nowprogress = 0
+    let time = new Date().valueOf()
+    for ( let u=0,len=Object.keys(terrain_map).length;u<len;u++){
         let progress = (u/len)*100
         if (progress >= nowprogress){
             nowprogress = progress + 0.1
