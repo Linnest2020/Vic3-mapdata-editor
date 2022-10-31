@@ -1,5 +1,6 @@
 import {jomini} from "./index.js"
 import {justwrite} from "./write.js"
+import { localization } from './i18n/i18n.js';
 
 class generate_locator {
     constructor(type,clamp_to_water_level=false,id=10000) {
@@ -86,6 +87,7 @@ glbk.style.zIndex = 165
 gl.style.zIndex = 170
 
 
+
 let canvasbg = document.getElementById("canvasbg")
 
 const open_locator = () => {
@@ -98,7 +100,13 @@ const open_locator = () => {
     if (canvasbg.lastChild != gl){
         canvasbg.appendChild(glbk)
         canvasbg.appendChild(gl)
+        btn.textContent = localization.save_locators
         board.appendChild(btn)
+        document.getElementById("mode_selection").disabled = true
+        document.getElementById("adj_draw").disabled = true
+        document.getElementById("city_draw").disabled = true
+        document.getElementById("river_draw").disabled = true
+        document.getElementById("save").disabled = true
     }
 }
 
@@ -106,6 +114,12 @@ export {open_locator}
 
 
 const close_locator = async function(e) {
+    let mode_selection = document.getElementById("mode_selection")
+    mode_selection.disabled = false
+    document.getElementById("adj_draw").disabled = false
+    document.getElementById("city_draw").disabled = false
+    document.getElementById("river_draw").disabled = false
+    document.getElementById("save").disabled = false
     if (canvasbg.lastChild == gl){
         canvasbg.removeChild(gl)
         canvasbg.removeChild(glbk)
@@ -113,6 +127,9 @@ const close_locator = async function(e) {
     if (board.lastChild == btn){
         board.removeChild(btn)
     }
+
+    mode_selection.value = "prov"
+    mode_selection.dispatchEvent(new Event("change",{target:{value:"prov"}}))
 
     let dump_data = locator_handle[type].dump()
     await fetch(

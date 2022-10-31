@@ -56,6 +56,8 @@ let localization = {
     loading_terrain:"加载地形",
     load_terrain_fin:"加载地形完毕",
     terrain:"地形",
+
+    save_locators:"保存地标",
 }
 
 export {localization}

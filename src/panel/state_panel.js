@@ -134,6 +134,7 @@ const draw_state_detail = (key,value,data,disabled=true) => {
     console.log(value_input)
     let plus = btn_adjustment("+")
     dom.appendChild(plus)
+
     minus.onclick = function(e) {
         if (!key_input.value || !value_input.value){
             if (!key && !value) dom.parentNode.removeChild(dom)
@@ -243,6 +244,12 @@ const draw_pop_detail = (cu,religion,size,data,pop_type,disabled=true) => {
     pt_input.type = "text"
     pt_input.classList.add("pt_input")
     dom.appendChild(pt_input)
+
+    cu_input.placeholder = "culture"
+    value_input.placeholder = "size"
+    r_input.placeholder = "religion"
+    pt_input.placeholder = "pop_type"
+
 
     minus.onclick = function(e) {
         if (!cu_input.value || !size_input.value){
@@ -395,6 +402,10 @@ const draw_building_detail = (key,lv,re,pm,data,disabled=true) => {
     re_input.type = "text"
     re_input.classList.add("lv_input")
 
+    key_input.placeholder = "building"
+    value_input.placeholder = "level"
+    re_input.placeholder = "reserves"
+
     dom.appendChild(key_input)
     dom.appendChild(op)
     dom.appendChild(value_input)
@@ -514,6 +525,9 @@ const draw_pm_detail = (key,data,kw="") => {
     key_input.value = key
     key_input.type = "text"
     key_input.classList.add("key_input")
+
+    key_input.placeholder = "activate_production_methods"
+
     dom.appendChild(key_input)
     let plus = btn_adjustment("+")
     dom.appendChild(plus)
@@ -580,6 +594,8 @@ const draw_one_detail = (key,text,data,kw) => {
     dom.appendChild(alands)
     dom.appendChild(key_input)
     
+    key_input.placeholder = "arable_resources"
+
     let plus = btn_adjustment("√")
     dom.appendChild(plus)
     plus.onclick = function(e) {
@@ -620,6 +636,7 @@ const draw_kv_detail = (key,value,data) => {
     value_input.classList.add("value_input")
     dom.appendChild(value_input)
 
+    key_input.placeholder = "capped_resources"
     
     let plus = btn_adjustment("+")
     dom.appendChild(plus)
@@ -710,7 +727,11 @@ const draw_resource_detail = (key,akey,un,max,data,index) => {
     max_input.classList.add("pico_input")
     dom.appendChild(max_input)
 
-    
+    key_input.placeholder = "type"
+    akey_input.placeholder = "depleted_type"
+    un_input.placeholder = "undiscovered_amount"
+    max_input.placeholder = "discover_amount_max"
+
     let plus = btn_adjustment("+") 
     dom.appendChild(plus)
 

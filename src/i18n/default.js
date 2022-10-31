@@ -57,6 +57,7 @@ let localization = {
     load_terrain_fin:"load terrain fin",
     terrain:"地形",
 
+    save_locators:"save locators",
 }
 
 export {localization}
