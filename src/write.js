@@ -39,9 +39,15 @@ const blockwrite = (writer,key,value,ambiuious=[],quote=[]) => {
             if (typeof(item) == 'number'){
                 if (String(item).indexOf(".")>-1) writer.write_f32(item)
                 else writer.write_integer(item)
-            } else  {
+            } else if (typeof(item) == 'string') {
                 if (quote.indexOf(key)>-1)writer.write_quoted(item)
                 else writer.write_unquoted(item)
+            } else {
+                writer.write_object_start();
+                for (let newkey in value[i]){
+                    blockwrite(writer,newkey,value[i][newkey],ambiuious=ambiuious,quote=quote)
+                }
+                writer.write_end();
             }
         }
         writer.write_end();

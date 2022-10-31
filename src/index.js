@@ -341,6 +341,7 @@ mode_selection.addEventListener("change",function(e){
     mode_render(mode)
 })
 
+import { open_locator } from './generate_locators.js';
 
 const mode_render = (mode) => {
     switch (mode){
@@ -359,6 +360,9 @@ const mode_render = (mode) => {
         case "strategic":
             show_panelboard(strategic_panelboard)
             strategic_mode();
+            break
+        case "locator":
+            open_locator();
             break
         case "terrain":
             show_panelboard(null)
