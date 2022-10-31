@@ -313,6 +313,8 @@ canvas.onclick = canvas_select
 canvas.onmouseover = province_detail
 canvas.onmousemove = province_detail
 
+
+
 import {update_map} from "./update/update_states.js"
 import {update_strategy} from "./update/update_strategy.js"
 
@@ -362,6 +364,9 @@ const mode_render = (mode) => {
             strategic_mode();
             break
         case "locator":
+            document.getElementById("river_draw").checked = false
+            show_panelboard(null)
+            state_mode(); 
             open_locator();
             break
         case "terrain":

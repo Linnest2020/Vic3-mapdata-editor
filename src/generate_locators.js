@@ -29,7 +29,7 @@ class generate_locator {
     rawappend(x,y,id){
         this.obj.game_object_locator.instances.push({
 			id:id,
-			position:[ x.toString() + ".000000",".000000","0.000000",y.toString() ],
+			position:[ x.toString() + ".000000","0.000000",y.toString() +".000000"],
 			rotation:["0.000000","0.000000","0.000000","0.000000"],
 			scale:["0.000000","0.000000","0.000000"],
 		})
@@ -41,10 +41,6 @@ class generate_locator {
             console.log(key,this.instances[key][0],this.instances[key][1])
             this.rawappend(this.instances[key][0],this.instances[key][1],key)
         }
-
-        console.log(this.obj.game_object_locator.instances)
-        console.log(this.obj.game_object_locator)
-        console.log(this.obj)
     
         let write = jomini.write(
             (writer) => {
@@ -73,58 +69,6 @@ let locator_handle = {
     wood: wood_locator
 }
 
-
-let example = {
-    "name": "city",
-    "clamp_to_water_level": false,
-    "render_under_water": false,
-    "generated_content": false,
-    "layer": "locators",
-    "instances": [
-        {
-            "id": "10001",
-            "position": [
-                "545.000000",
-                ".000000",
-                "0.000000",
-                "737"
-            ],
-            "rotation": [
-                "0.000000",
-                "0.000000",
-                "0.000000",
-                "0.000000"
-            ],
-            "scale": [
-                "0.000000",
-                "0.000000",
-                "0.000000"
-            ]
-        },
-        {
-            "id": "10002",
-            "position": [
-                "374.000000",
-                ".000000",
-                "0.000000",
-                "850"
-            ],
-            "rotation": [
-                "0.000000",
-                "0.000000",
-                "0.000000",
-                "0.000000"
-            ],
-            "scale": [
-                "0.000000",
-                "0.000000",
-                "0.000000"
-            ]
-        }
-    ]
-}
-
-
 let back_locator = {
 
 }
@@ -148,6 +92,7 @@ const open_locator = () => {
     [glbk.width,glbk.height] = [main_canvas.width,main_canvas.height]
     gl.width = main_canvas.width
     gl.height = main_canvas.height
+    gl.onmousemove = main_canvas.onmousemove
     glctx.fillStyle="rgba(255,255,255,0.1)"
     glctx.fillRect(0,0,gl.width,gl.height)
     if (canvasbg.lastChild != gl){
@@ -160,7 +105,7 @@ const open_locator = () => {
 export {open_locator}
 
 
-const close_locator = function(e) {
+const close_locator = async function(e) {
     if (canvasbg.lastChild == gl){
         canvasbg.removeChild(gl)
         canvasbg.removeChild(glbk)
@@ -168,7 +113,19 @@ const close_locator = function(e) {
     if (board.lastChild == btn){
         board.removeChild(btn)
     }
-    console.log(locator_handle[type].dump())
+
+    let dump_data = locator_handle[type].dump()
+    await fetch(
+        "./upload",{
+            method:"POST",
+            body: JSON.stringify({
+                "src":"outputs",
+                "data":{
+                    [dump_data.name]:dump_data.data,
+                }
+            })
+        }
+    )
 }
 btn.onclick = close_locator
 
@@ -189,12 +146,12 @@ gl.onclick = function(e){
     let y = e.pageY - this.offsetTop
     
 
-    let glbk_data = glbkctx.getImageData(0,0,main_canvas.width,main_canvas.height)
+    let glbk_data = glctx.getImageData(0,0,main_canvas.width,main_canvas.height)
     let r = glbk_data.data[(y*main_canvas.width + x)*4]
     let g = glbk_data.data[(y*main_canvas.width + x)*4 + 1]
     let b = glbk_data.data[(y*main_canvas.width + x)*4 + 2]
     console.log("thisrgb",r,g,b)
-    let color = r<<16+g<<8+b<<0
+    let color = (r<<16)+(g<<8)+(b<<0)
     console.log(color)
     let ins = locator_handle[type].instances
 
@@ -207,7 +164,7 @@ gl.onclick = function(e){
     console.log(color)
     if (color == 0 || color == 255<<16+255<<8+255){
         console.log("0","nocolor",color)
-        locator_handle[type].append(x,y) // add
+        locator_handle[type].append(x,main_canvas.height-y) // add
     } else {
         console.log("1",color)
         locator_handle[type].remove(color)// remove
@@ -220,29 +177,29 @@ gl.onclick = function(e){
     for (let i=0,len=Object.keys(ins).length;i<len;i++){
         let key = Object.keys(ins)[i]
 
-        glbkctx.beginPath();
-        glctx.beginPath();
+        
+        
         let r=0,g=0,b=0
         r = ( 0xFF0000 & key ) >> 16
         g = ( 0x00FF00 & key ) >> 8
         b = ( 0x0000FF & key ) >> 0
         console.log("rgb:",r,g,b)
-        glbkctx.fillStyle = "#"+ r.toString(16).padStart(2, '0').toUpperCase() + g.toString(16).padStart(2, '0').toUpperCase() + b.toString(16).padStart(2, '0').toUpperCase()
-        // glbkctx.fillStyle = `rgb(${r},${g},${b})`
-        glctx.fillStyle = "pink" //typecolor[type];
 
         let dx,dy
-
         dx = ins[key][0]
-        dy = ins[key][1]
-        // circles[ins[0].id] = [parseInt(dx),parseInt(dy)]
+        dy = main_canvas.height - ins[key][1]
 
-        glbkctx.arc(dx,dy,5,0,2*Math.PI)
-        // glctx.arc(dx,dy,5,0,2*Math.PI)
-        glbkctx.closePath();
-        glbkctx.fill()
+        // glbkctx.beginPath();
+        // glbkctx.fillStyle = "#"+ r.toString(16).padStart(2, '0').toUpperCase() + g.toString(16).padStart(2, '0').toUpperCase() + b.toString(16).padStart(2, '0').toUpperCase()
+        // glbkctx.arc(dx,dy,5,0,2*Math.PI)
+        // glbkctx.closePath();
+        // glbkctx.fill()
+        // glbkctx.fillStyle = `rgb(${r},${g},${b})`
+
+        glctx.beginPath();
+        glctx.fillStyle = "#"+ r.toString(16).padStart(2, '0').toUpperCase() + g.toString(16).padStart(2, '0').toUpperCase() + b.toString(16).padStart(2, '0').toUpperCase() //typecolor[type];
+        glctx.arc(dx,dy,5,0,2*Math.PI)
         glctx.closePath();
-        
         glctx.fill()
     }    
 }
