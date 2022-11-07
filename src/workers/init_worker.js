@@ -39,7 +39,7 @@ const init_colormap = (img_data) => {
     let color_key = ""
     let color = 0
     let time = new Date().valueOf()
-    for(var i = 0; i < length; i+=4){
+    for(let i = 0; i < length; i+=4){
         let progress = (i/length)*100
         if (progress >= nowprogress){
             nowprogress = progress + 0.1
@@ -55,14 +55,10 @@ const init_colormap = (img_data) => {
         } else {
             color_key = "x"+ color.toString(16).padStart(6, '0').toUpperCase()
             color_key_map[color] = color_key
-        }
-        if (colormap[color_key]){
-            colormap[color_key].push(i)
-            continue
-        } else {
             colormap[color_key] = [i]
+            continue
         }
-        
+        colormap[color_key].push(i)
     }
 }
 
