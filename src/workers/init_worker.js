@@ -69,45 +69,50 @@ const init_colormap = (img_data) => {
 const init_state_map = (colormap,history_state_dict) => {
     let nowprogress = 0
     let time = new Date().valueOf()
-    for ( let uu=0,len = Object.keys(history_state_dict["STATES"]).length;uu<len;uu++){
+
+    for ( let len = Object.keys(history_state_dict["STATES"]).length,uu=len;uu--;){
         u=Object.keys(history_state_dict["STATES"])[uu]
-        let progress = (uu/len)*100
+        let progress = (1-(uu/len))*100
         if (progress >= nowprogress){
             nowprogress = progress + 0.1
             postMessage({"data":`${localization.loading_states}${nowprogress.toFixed(2)}%`})
             
-            if (uu+1==len){
+            if (uu==0){
                 console.log(`${localization.load_states_fin}${new Date().valueOf() - time}`)
             }
         }
-        if (history_state_dict["STATES"][u]["create_state"] instanceof Array){
-            for (let n = 0;n < history_state_dict["STATES"][u]["create_state"].length;n++){
-                statecolormap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"][n]["country"]}`] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
-                for ( let i =0;i<history_state_dict["STATES"][u]["create_state"][n]["owned_provinces"].length;i++){
-                    history_state_dict["STATES"][u]["create_state"][n]["owned_provinces"][i] = "x"+parseInt("0"+history_state_dict["STATES"][u]["create_state"][n]["owned_provinces"][i]).toString(16).padStart(6, '0').toUpperCase()
-                    for (let j of colormap[history_state_dict["STATES"][u]["create_state"][n]["owned_provinces"][i]]){
-                            if (statepointmap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"][n]["country"]}`]){
-                                statepointmap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"][n]["country"]}`].push(j)
-                            } else {statepointmap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"][n]["country"]}`] = [j]}
-                        }
+
+        let state_block = history_state_dict["STATES"][u]["create_state"]
+
+        if (state_block instanceof Array){
+            for (let n = 0;n < state_block.length;n++){
+                statecolormap[`${u}.region_state:${state_block[n]["country"]}`] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
+                for ( let prov_block = state_block[n]["owned_provinces"],i=prov_block.length;i--;){
+                    prov_block[i] = "x"+parseInt("0"+prov_block[i]).toString(16).padStart(6, '0').toUpperCase()
+                    for (let jj = colormap[prov_block[i]].length;jj--;){
+                        let j = colormap[prov_block[i]][jj]
+                        if (statepointmap[`${u}.region_state:${state_block[n]["country"]}`]){
+                            statepointmap[`${u}.region_state:${state_block[n]["country"]}`].push(j)
+                        } else {statepointmap[`${u}.region_state:${state_block[n]["country"]}`] = [j]}
+                    }
                 }
             }
         } else{
-            statecolormap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"]["country"]}`] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
-            for (let i =0;i<history_state_dict["STATES"][u]["create_state"]["owned_provinces"].length;i++){
-                history_state_dict["STATES"][u]["create_state"]["owned_provinces"][i] = "x"+parseInt("0"+history_state_dict["STATES"][u]["create_state"]["owned_provinces"][i]).toString(16).padStart(6, '0').toUpperCase()
-                if (!colormap[history_state_dict["STATES"][u]["create_state"]["owned_provinces"][i]]){
-                    console.warn("Can not find: "+history_state_dict["STATES"][u]["create_state"]["owned_provinces"][i]+" in map! deleted.")
-                    history_state_dict["STATES"][u]["create_state"]["owned_provinces"] = history_state_dict["STATES"][u]["create_state"]["owned_provinces"].filter((items,index) => ![i].includes(index))
+            statecolormap[`${u}.region_state:${state_block["country"]}`] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
+            for (let prov_block = state_block["owned_provinces"],i=prov_block.length;i--;){
+                prov_block[i] = "x"+parseInt("0"+prov_block[i]).toString(16).padStart(6, '0').toUpperCase()
+                if (!colormap[prov_block[i]]){
+                    console.warn("Can not find: "+prov_block[i]+" in map! deleted.")
+                    prov_block = prov_block.filter((items,index) => ![i].includes(index))
                     continue
                 }
-                for (let j of colormap[history_state_dict["STATES"][u]["create_state"]["owned_provinces"][i]]){
-                    if (statepointmap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"]["country"]}`]){
-                        statepointmap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"]["country"]}`].push(j) 
-                    } else {statepointmap[`${u}.region_state:${history_state_dict["STATES"][u]["create_state"]["country"]}`] = [j]}
+                for (let jj = colormap[prov_block[i]].length;jj--;){
+                    let j = colormap[prov_block[i]][jj]
+                    if (statepointmap[`${u}.region_state:${state_block["country"]}`]){
+                        statepointmap[`${u}.region_state:${state_block["country"]}`].push(j) 
+                    } else {statepointmap[`${u}.region_state:${state_block["country"]}`] = [j]}
                 }
             }
-            
         }
     }
     postMessage({"correct_history_state_dict":history_state_dict})

@@ -14,13 +14,15 @@ const strategic_mode = () => {
         for (let i = 0,keys=Object.keys(full_map_data.strategic_regions_map),len=keys.length; i < len;i++){
             
             let map_color = []
-            if (full_map_data.strategic_regions_map[keys[i]]["map_color"]){
+            let sr_map = full_map_data.strategic_regions_map[keys[i]]
+            
+            if (sr_map["map_color"]){
                 map_color = full_map_data.strategic_regions_map[keys[i]]["map_color"]
                 if (map_color[0] <= 1 ) map_color = [Math.ceil(map_color[0]*255),Math.ceil(map_color[1]*255),Math.ceil(map_color[2]*255)]
             } else map_color = [0,0,255]
     
             let colorful_states = []
-            for (let j=0,map_key=full_map_data.strategic_regions_map[keys[i]]["states"],map_len=map_key.length;j<map_len;j++){
+            for (let j=0,map_key=sr_map["states"],map_len=map_key.length;j<map_len;j++){
                 if (full_map_data.history_state_dict["STATES"]["s:"+map_key[j]]) {
                     if (!(full_map_data.history_state_dict["STATES"]["s:"+map_key[j]]["create_state"] instanceof Array)){
                         colorful_states.push(`s:${map_key[j]}.region_state:${full_map_data.history_state_dict["STATES"]["s:"+map_key[j]]["create_state"]["country"]}`)
