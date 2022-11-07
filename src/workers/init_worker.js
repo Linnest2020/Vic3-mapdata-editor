@@ -70,8 +70,11 @@ const init_state_map = (colormap,history_state_dict) => {
     let nowprogress = 0
     let time = new Date().valueOf()
 
-    for ( let len = Object.keys(history_state_dict["STATES"]).length,uu=len;uu--;){
-        u=Object.keys(history_state_dict["STATES"])[uu]
+    let state_region_block = history_state_dict["STATES"]
+    let wrong_patt = /x[a-f0-9]{6}/
+
+    for ( let len = Object.keys(state_region_block).length,uu=len;uu--;){
+        u=Object.keys(state_region_block)[uu]
         let progress = (1-(uu/len))*100
         if (progress >= nowprogress){
             nowprogress = progress + 0.1
@@ -82,25 +85,27 @@ const init_state_map = (colormap,history_state_dict) => {
             }
         }
 
-        let state_block = history_state_dict["STATES"][u]["create_state"]
+        let state_block = state_region_block[u]["create_state"]
 
         if (state_block instanceof Array){
             for (let n = 0;n < state_block.length;n++){
-                statecolormap[`${u}.region_state:${state_block[n]["country"]}`] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
+                let state_mark = `${u}.region_state:${state_block[n]["country"]}`
+                statecolormap[state_mark] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
                 for ( let prov_block = state_block[n]["owned_provinces"],i=prov_block.length;i--;){
-                    prov_block[i] = "x"+parseInt("0"+prov_block[i]).toString(16).padStart(6, '0').toUpperCase()
+                    if (wrong_patt.exec(prov_block[i])) prov_block[i] = "x"+parseInt("0"+prov_block[i]).toString(16).padStart(6, '0').toUpperCase()
                     for (let jj = colormap[prov_block[i]].length;jj--;){
                         let j = colormap[prov_block[i]][jj]
-                        if (statepointmap[`${u}.region_state:${state_block[n]["country"]}`]){
-                            statepointmap[`${u}.region_state:${state_block[n]["country"]}`].push(j)
-                        } else {statepointmap[`${u}.region_state:${state_block[n]["country"]}`] = [j]}
+                        if (statepointmap[state_mark]){
+                            statepointmap[state_mark].push(j)
+                        } else {statepointmap[state_mark] = [j]}
                     }
                 }
             }
         } else{
-            statecolormap[`${u}.region_state:${state_block["country"]}`] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
+            let state_mark = `${u}.region_state:${state_block["country"]}`
+            statecolormap[state_mark] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
             for (let prov_block = state_block["owned_provinces"],i=prov_block.length;i--;){
-                prov_block[i] = "x"+parseInt("0"+prov_block[i]).toString(16).padStart(6, '0').toUpperCase()
+                if (wrong_patt.exec(prov_block[i])) prov_block[i] = "x"+parseInt("0"+prov_block[i]).toString(16).padStart(6, '0').toUpperCase()
                 if (!colormap[prov_block[i]]){
                     console.warn("Can not find: "+prov_block[i]+" in map! deleted.")
                     prov_block = prov_block.filter((items,index) => ![i].includes(index))
@@ -108,9 +113,9 @@ const init_state_map = (colormap,history_state_dict) => {
                 }
                 for (let jj = colormap[prov_block[i]].length;jj--;){
                     let j = colormap[prov_block[i]][jj]
-                    if (statepointmap[`${u}.region_state:${state_block["country"]}`]){
-                        statepointmap[`${u}.region_state:${state_block["country"]}`].push(j) 
-                    } else {statepointmap[`${u}.region_state:${state_block["country"]}`] = [j]}
+                    if (statepointmap[state_mark]){
+                        statepointmap[state_mark].push(j) 
+                    } else {statepointmap[state_mark] = [j]}
                 }
             }
         }
