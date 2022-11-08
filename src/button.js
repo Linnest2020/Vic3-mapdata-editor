@@ -1,10 +1,35 @@
-import {jomini,full_map_data} from "./index.js"
+import {jomini,full_map_data,full_data} from "./index.js"
 import {justwrite} from "./write.js"
 
 let dump_button = document.getElementById("save")
 let convert_button = document.getElementById("convert")
 
+
+const preprocess = (map,header) => {
+    let data = map[header]
+    for (let state=Object.keys(data),i=state.length;i--;){
+        let name = state[i]
+        for (let state_region=Object.keys(data[name]),j=state_region.length;j--;){
+            let full_name = name +"." +state_region[j].replace(":",":c:")
+            if (!full_data.statepointmap[full_name]){
+                console.log("delete empty scope",header,full_name)
+                delete map[header][name][state_region[j]]
+            }
+        }
+        if (!Object.keys(data[name])){
+            delete map[header][name]
+        }
+    }
+    return map
+
+}
+
+
+
 dump_button.onclick = async function(e) {
+
+    let pops_map = preprocess(full_map_data.pops_map,"POPS")
+    let buildings_map = preprocess(full_map_data.buildings_map,"BUILDINGS")
     
     let history_state_write = jomini.write(
         (writer) => {
@@ -29,13 +54,13 @@ dump_button.onclick = async function(e) {
 
     let buildings_map_write = jomini.write(
         (writer) => {
-            justwrite(writer,full_map_data.buildings_map,["create_building"],["building","activate_production_methods"])
+            justwrite(writer,buildings_map,["create_building"],["building","activate_production_methods"])
         }
     )
 
     let pops_map_write = jomini.write(
         (writer) => {
-            justwrite(writer,full_map_data.pops_map,["create_pop"])
+            justwrite(writer,pops_map,["create_pop"])
         }
     )
 
