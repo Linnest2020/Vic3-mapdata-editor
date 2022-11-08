@@ -252,7 +252,7 @@ const draw_pop_detail = (cu,religion,size,data,pop_type,disabled=true) => {
 
 
     minus.onclick = function(e) {
-        if (!cu_input.value || !size_input.value){
+        if (!cu_input.value || !value_input.value){
             if (!cu && !size) dom.parentNode.removeChild(dom)
             else return
         }

@@ -9,8 +9,6 @@ const update_map = (provs_name,state_name,country_name) => {
     // full_data.statecolormap[statefullname]: [hexcolor]
     let local_tp = false
 
-    let history_states = full_map_data.history_state_dict["STATES"]
-
     for (let prov of provs_name){
         // prov 
 
@@ -20,9 +18,6 @@ const update_map = (provs_name,state_name,country_name) => {
         let old_state = ""
         let old_country = ""
         // sub from state point map
-
-        
-
         for (let si=0,sp=Object.keys(full_data.statepointmap),splen=sp.length;si<splen;si++){
             let statepoint = sp[si]
             index_to_del = -1
@@ -32,20 +27,18 @@ const update_map = (provs_name,state_name,country_name) => {
                 old_state = oldold[0]
                 old_country = oldold[1]
                 
-                let old_state_block = history_states[old_state]["create_state"]
-
-                if ( !(old_state_block instanceof Array)){
-                    old_state_block["owned_provinces"] = old_state_block["owned_provinces"].filter(item => item!=prov)
-                    if (old_state_block["owned_provinces"].length == 0){
-                        delete history_states[old_state]
+                if ( !(full_map_data.history_state_dict["STATES"][old_state]["create_state"] instanceof Array)){
+                    full_map_data.history_state_dict["STATES"][old_state]["create_state"]["owned_provinces"] = full_map_data.history_state_dict["STATES"][old_state]["create_state"]["owned_provinces"].filter(item => item!=prov)
+                    if (full_map_data.history_state_dict["STATES"][old_state]["create_state"]["owned_provinces"].length == 0){
+                        delete full_map_data.history_state_dict["STATES"][old_state]
                         delete full_map_data.state_regions_map[old_state.replace("s:","")]
                     }
                 } else {
-                    for (let j=0;j<old_state_block.length;j++){
-                        if (old_state_block[j]["country"] == old_country){
-                            old_state_block[j]["owned_provinces"] = old_state_block[j]["owned_provinces"].filter(item => item!=prov)
-                            if (old_state_block[j]["owned_provinces"].length == 0){
-                                old_state_block = old_state_block.filter((items,index) => ![j].includes(index))
+                    for (let j=0;j<full_map_data.history_state_dict["STATES"][old_state]["create_state"].length;j++){
+                        if (full_map_data.history_state_dict["STATES"][old_state]["create_state"][j]["country"] == old_country){
+                            full_map_data.history_state_dict["STATES"][old_state]["create_state"][j]["owned_provinces"] = full_map_data.history_state_dict["STATES"][old_state]["create_state"][j]["owned_provinces"].filter(item => item!=prov)
+                            if (full_map_data.history_state_dict["STATES"][old_state]["create_state"][j]["owned_provinces"].length == 0){
+                                full_map_data.history_state_dict["STATES"][old_state]["create_state"] = full_map_data.history_state_dict["STATES"][old_state]["create_state"].filter((items,index) => ![j].includes(index))
 
                             }
                         }
@@ -88,45 +81,45 @@ const update_map = (provs_name,state_name,country_name) => {
             }
 
 
-            let full_sr_name = `${state_name}.region_state:${country_name}`
-            if (full_data.statepointmap[full_sr_name]){
+
+            if (full_data.statepointmap[`${state_name}.region_state:${country_name}`]){
                 // exists
-                let state_name_block = history_states[state_name]["create_state"]
-                if ( !(state_name_block instanceof Array)){
-                    state_name_block["owned_provinces"].push(prov)
-                } else if (full_data.statepointmap[full_sr_name].length == 0){
-                    state_name_block.push({"country":country_name,"owned_provinces":[prov]})
+                
+                if ( !(full_map_data.history_state_dict["STATES"][state_name]["create_state"] instanceof Array)){
+                    full_map_data.history_state_dict["STATES"][state_name]["create_state"]["owned_provinces"].push(prov)
+                } else if (full_data.statepointmap[`${state_name}.region_state:${country_name}`].length == 0){
+                    full_map_data.history_state_dict["STATES"][state_name]["create_state"].push({"country":country_name,"owned_provinces":[prov]})
                 } else {
-                    for (let j=0;j<state_name_block.length;j++){
-                        if (state_name_block[j]["country"] == country_name){
-                            state_name_block[j]["owned_provinces"].push(prov)
+                    for (let j=0;j<full_map_data.history_state_dict["STATES"][state_name]["create_state"].length;j++){
+                        if (full_map_data.history_state_dict["STATES"][state_name]["create_state"][j]["country"] == country_name){
+                            full_map_data.history_state_dict["STATES"][state_name]["create_state"][j]["owned_provinces"].push(prov)
                         }
                     }
 
                 }
 
-                full_data.statepointmap[full_sr_name] = [...full_data.statepointmap[full_sr_name],...sindex_list]
+                full_data.statepointmap[`${state_name}.region_state:${country_name}`] = [...full_data.statepointmap[`${state_name}.region_state:${country_name}`],...sindex_list]
 
 
             } else {
                 // no exists
-                if (!history_states[state_name]){
-                    history_states[state_name] = {"create_state":{"country":country_name,"owned_provinces":[prov]}}
-                } else if (history_states[state_name]["create_state"] instanceof Array){
-                    history_states[state_name]["create_state"].push({"country":country_name,"owned_provinces":[prov]})
-                } else if (!(history_states[state_name]["create_state"] instanceof Array)) {
-                    history_states[state_name]["create_state"] = [history_states[state_name]["create_state"],{"country":country_name,"owned_provinces":[prov]}]
+                if (!full_map_data.history_state_dict["STATES"][state_name]){
+                    full_map_data.history_state_dict["STATES"][state_name] = {"create_state":{"country":country_name,"owned_provinces":[prov]}}
+                } else if (full_map_data.history_state_dict["STATES"][state_name]["create_state"] instanceof Array){
+                    full_map_data.history_state_dict["STATES"][state_name]["create_state"].push({"country":country_name,"owned_provinces":[prov]})
+                } else if (!(full_map_data.history_state_dict["STATES"][state_name]["create_state"] instanceof Array)) {
+                    full_map_data.history_state_dict["STATES"][state_name]["create_state"] = [full_map_data.history_state_dict["STATES"][state_name]["create_state"],{"country":country_name,"owned_provinces":[prov]}]
                 }
-                full_data.statepointmap[full_sr_name] = [...sindex_list]
-                full_data.statecolormap[full_sr_name] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
+                full_data.statepointmap[`${state_name}.region_state:${country_name}`] = [...sindex_list]
+                full_data.statecolormap[`${state_name}.region_state:${country_name}`] = [Math.ceil(Math.random()*255),Math.ceil(Math.random()*255),Math.ceil(Math.random()*255)]
 
             }
             // colorize
             for (let i=0;i<sindex_list.length;i++){
                 if (full_data.state_data.data[sindex_list[i]]!=0&&full_data.state_data.data[sindex_list[i]+1]!=0&&full_data.state_data.data[sindex_list[i]+2]!=0){
-                    full_data.state_data.data[sindex_list[i]] = full_data.statecolormap[full_sr_name][0]
-                    full_data.state_data.data[sindex_list[i]+1] = full_data.statecolormap[full_sr_name][1]
-                    full_data.state_data.data[sindex_list[i]+2] = full_data.statecolormap[full_sr_name][2]
+                    full_data.state_data.data[sindex_list[i]] = full_data.statecolormap[`${state_name}.region_state:${country_name}`][0]
+                    full_data.state_data.data[sindex_list[i]+1] = full_data.statecolormap[`${state_name}.region_state:${country_name}`][1]
+                    full_data.state_data.data[sindex_list[i]+2] = full_data.statecolormap[`${state_name}.region_state:${country_name}`][2]
                 }
             }
             
