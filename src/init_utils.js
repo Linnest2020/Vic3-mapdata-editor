@@ -1,23 +1,30 @@
 import {jomini} from "./index.js"
 
-const check_debug = async () =>{
-    return fetch("./debug").then(resp => resp.json()).then(res => res["debug"])
+const get_debug_info = async () =>{
+    return fetch("./debug").then(resp => resp.json())
 }
 
 const get_text_dict = async (src) => { return fetch (src)
     .then(resp => resp.text()).then(buffer => jomini.parseText(buffer))}
-const get_file_dict = async (src) => {
+const get_file_dict = async (src,vanilla=false) => {
     return fetch(`./upload?src=${src}`).then(resp => resp.json())
     .then(
         async(list) =>{
             let dict = {}
+            let root_src= "data"
+            if (vanilla) root_src = "game_data"
             for (let i=0,len=list.length;i<len;i++){
-                dict[list[i]] = await fetch(`./data/${src}/${list[i]}`).then(resp => resp.text()).then(buffer => jomini.parseText(buffer))
+                dict[list[i]] = await fetch(`./${root_src}/${src}/${list[i]}`).then(resp => resp.text()).then(buffer => jomini.parseText(buffer))
             }
             return dict
         }
     )
 }
+
+
+
+
+
 
 const get_dict_map = (dict,header=null) => {
     let map = {}
@@ -67,4 +74,4 @@ const get_terrain_dict = (buffer) => {
 
 
 
-export {get_dict_map,get_text_dict,get_file_dict,get_csv,check_debug,get_terrain_dict}
+export {get_dict_map,get_text_dict,get_file_dict,get_csv,get_debug_info,get_terrain_dict}

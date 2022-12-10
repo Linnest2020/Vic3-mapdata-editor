@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -24,6 +25,7 @@ var Showed bool = true
 var kernel32 = syscall.NewLazyDLL("kernel32.dll")
 var user32 = syscall.NewLazyDLL("user32.dll")
 var isDebug bool = false
+var isGameinstall = false
 
 var localization = get_localization()
 
@@ -36,9 +38,11 @@ var getConsoleWindows = kernel32.NewProc("GetConsoleWindow")
 var showWindowAsync = user32.NewProc("ShowWindowAsync")
 var SetForegroundWindow = user32.NewProc("SetForegroundWindow")
 var data_src = "./data"
+var game_data = ""
 
 func main() {
 	go func() {
+		game_data = get_vanilla_path()
 		http.Handle("/", http.HandlerFunc(
 			func(rw http.ResponseWriter, r *http.Request) {
 				log.Printf("%s %s%s from %s\n", r.Method, r.Host, r.URL.String(), r.RemoteAddr)
@@ -50,10 +54,20 @@ func main() {
 				}
 				http.FileServer(http.Dir(".")).ServeHTTP(rw, r)
 			}))
-		http.Handle("/datab", http.HandlerFunc(
+		http.Handle("/game_data/", http.HandlerFunc(
 			func(rw http.ResponseWriter, r *http.Request) {
 				log.Printf("%s %s%s from %s\n", r.Method, r.Host, r.URL.String(), r.RemoteAddr)
-				http.FileServer(http.Dir("/data")).ServeHTTP(rw, r)
+				prefix := "/game_data/"
+				p := strings.TrimPrefix(r.URL.Path, prefix)
+				rp := strings.TrimPrefix(r.URL.RawPath, prefix)
+				r2 := new(http.Request)
+				*r2 = *r
+				r2.URL = new(url.URL)
+				*r2.URL = *r.URL
+				r2.URL.Path = p
+				r2.URL.RawPath = rp
+				log.Printf("%s %s%s from %s changed\n", r2.Method, r2.Host, r2.URL.String(), r2.RemoteAddr)
+				http.FileServer(http.Dir(game_data)).ServeHTTP(rw, r2)
 			}))
 		http.HandleFunc("/upload", handle_upload)
 		http.HandleFunc("/debug", handle_debug)
@@ -69,6 +83,20 @@ func main() {
 
 	// 托盘程序逻辑
 	systray.Run(onReady, onExit, onClicked)
+}
+
+func get_vanilla_path() string {
+	key1, err := registry.OpenKey(registry.LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 529340", registry.READ)
+	if err != nil {
+		return ""
+	}
+	key, _, err := key1.GetStringValue("InstallLocation")
+	if err != nil {
+		return ""
+	} else {
+		isGameinstall = true
+	}
+	return key
 }
 
 func initciate_notification() {
@@ -169,10 +197,16 @@ func handle_upload(rw http.ResponseWriter, r *http.Request) {
 		}
 	} else if r.Method == "GET" {
 		src := r.URL.Query().Get("src")
-		if src != "" {
-			src = data_src + "/" + src
+		src_root := ""
+		if isGameinstall {
+			src_root = game_data
 		} else {
-			src = data_src
+			src_root = data_src
+		}
+		if src != "" {
+			src = src_root + "/" + src
+		} else {
+			src = src_root
 		}
 		var files []string
 		err := filepath.Walk(src, func(path string, info fs.FileInfo, err error) error {
@@ -184,7 +218,7 @@ func handle_upload(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err)
 		}
-		log.Printf("%s: %s", src, files)
+		log.Printf("Get file %s: %s", src, files)
 		rw.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(rw).Encode(files)
 
@@ -200,7 +234,8 @@ func handle_debug(rw http.ResponseWriter, r *http.Request) {
 	log.Printf("%s %s%s from %s\n", r.Method, r.Host, r.URL.String(), r.RemoteAddr)
 	if r.Method == "GET" {
 		res := map[string]bool{
-			"debug": isDebug,
+			"debug":   isDebug,
+			"vanilla": isGameinstall,
 		}
 		json.NewEncoder(rw).Encode(res)
 

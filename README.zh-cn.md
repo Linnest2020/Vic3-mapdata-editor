@@ -28,6 +28,10 @@ Vic3 mapdata editor 是基于[Jomini](https://github.com/nickbabcock/jomini)的,
 
 ## 快速上手
 
+随着新版本发布, 如果你安装了原版的游戏, 你无需放置任何文件就可以启动编辑器。
+
+但若你安装游戏失败, 请遵循以下的放置程序:
+
 在本项目的`data`文件夹里
 
 -   buildings: 将`game/common/history/buildings`的所有文件放到这里

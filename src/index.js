@@ -5,6 +5,7 @@ const canvas = document.getElementById('canvas');
 canvas.style.cursor = "crosshair"
 
 var ctx = canvas.getContext('2d',{colorSpace: "srgb",willReadFrequently:true});
+ctx.imageSmoothingEnabled = false;
 
 var tip = document.getElementById('output')
 
@@ -56,21 +57,35 @@ const gethexname = (r,g,b) => "x" + (r.toString(16).padStart(2, '0') + g.toStrin
 const jomini = await Jomini.initialize({ wasm: wasmUrl })
 
 export {canvas,jomini}
-import {get_dict_map,get_file_dict,get_csv,check_debug,get_text_dict,get_terrain_dict} from "./init_utils.js"
+import {get_dict_map,get_file_dict,get_csv,get_debug_info,get_text_dict,get_terrain_dict} from "./init_utils.js"
 import { localization } from './i18n/i18n.js';
 
-var debug = await check_debug()
+var debug_info = await get_debug_info()
+var debug = debug_info["debug"]
+var vanilla = debug_info["vanilla"]
+var root_src= "data"
+if (vanilla) root_src = "game_data"
 
 var strategic_regions,state_regions,history_state,pops,buildings
 
 var history_state_dict,state_regions_map,strategic_regions_map,pops_map,buildings_map
 var terrain_map
 if (!debug){
-    strategic_regions = await get_file_dict("strategic_regions")
-    state_regions = await get_file_dict("state_regions")
-    history_state = await get_file_dict("states")
-    pops = await get_file_dict("pops")
-    buildings = await get_file_dict("buildings")
+    if (!vanilla){
+        strategic_regions = await get_file_dict("strategic_regions")
+        state_regions = await get_file_dict("state_regions")
+        history_state = await get_file_dict("states")
+        pops = await get_file_dict("pops")
+        buildings = await get_file_dict("buildings")
+    } else {
+        console.log("vanilla")
+        strategic_regions = await get_file_dict("game/common/strategic_regions",vanilla)
+        state_regions = await get_file_dict("game/map_data/state_regions",vanilla)
+        history_state = await get_file_dict("game/common/history/states",vanilla)
+        pops = await get_file_dict("game/common/history/pops",vanilla)
+        buildings = await get_file_dict("game/common/history/buildings",vanilla)
+    }
+
 
     history_state_dict = get_dict_map(history_state,"STATES")
     state_regions_map = get_dict_map(state_regions)
@@ -92,7 +107,9 @@ console.log(pops_map,buildings_map)
 var strategic_data_lock = false
 var terrain_data_lock = false
 
-var adjacencies = await fetch("./data/adjacencies.csv").then(resp => resp.text()).then(buffer => get_csv(buffer))
+var adj_src = "./data/adjacencies.csv"
+if (vanilla) adj_src = "./game_data/game/map_data/adjacencies.csv"
+var adjacencies = await fetch(adj_src).then(resp => resp.text()).then(buffer => get_csv(buffer))
 
 var adj_pos = []
 for (let i=0;i<adjacencies.length;i++){
@@ -109,7 +126,9 @@ var full_map_data = {history_state_dict,adj_pos,state_regions_map,strategic_regi
 export {full_map_data}
 
 const img = new Image()
-img.src = "./data/provinces.png" /** 我也不知道为什么现在是onload在后面才行 **/
+var img_src = "./data/provinces.png" /** 我也不知道为什么现在是onload在后面才行 **/
+if (vanilla) img_src = "./game_data/game/map_data/provinces.png"
+img.src = img_src
 img.crossOrigin = ""
 canvas.width = img.width;
 canvas.height = img.height;
@@ -137,8 +156,9 @@ init_worker.onmessage = function(e) {
         full_data.state_data = state_data
         
         // get_text_dict("./data/province_terrains.txt").then(res => {full_map_data.terrain_map = res})
-
-        fetch("./data/province_terrains.txt").then((resp) => {
+        let province_terrain_src = "./data/province_terrains.txt"
+        if (vanilla) province_terrain_src =  "./game_data/game/map_data/province_terrains.txt"
+        fetch(province_terrain_src).then((resp) => {
             if (!resp.ok){
                 throw new Error("404")
             } else {
@@ -173,7 +193,9 @@ img.onload =function(e){
     }
     init_worker.postMessage({localization})
     init_worker.postMessage([reset_data,history_state_dict,canvas.width])
-    river_map.src = "./data/rivers.png"
+    let river_src = "./data/rivers.png"
+    if (vanilla) river_src = "./game_data/game/map_data/rivers.png"
+    river_map.src = river_src
 
 }
 var river_data = null

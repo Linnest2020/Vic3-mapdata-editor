@@ -28,6 +28,10 @@ Vic3 mapdata editor is an open source province editor based off [Jomini](https:/
 
 ## Quick Guide
 
+By the new version, if you install vanilla game, you can just launch the ediotr without put anything!
+
+If your game installation failed, please follow the guides below:
+
 In `data` folder of the repo:
 
 -   buildings: place all documents in `game/common/history/buildings` to this folder
