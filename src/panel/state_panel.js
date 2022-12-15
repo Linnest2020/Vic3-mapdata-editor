@@ -121,6 +121,29 @@ const keyequalitem = (key,value) => {
     return [key_input,op,value_input]
 }
 
+const create_input = (title,_class,value=null,placevalue="",isCap=false,prefix=null) => {
+    let input = document.createElement("input")
+    input.placeholder = title
+    input.type = "text"
+    input.classList.add(_class)
+
+    input.value = placevalue
+    if (value) input.value = value
+    
+
+    input.oninput = function (e){
+        input.value = input.value.replaceAll(" ","_")
+        if (isCap) input.value = input.value.toUpperCase()
+
+        if (prefix) {
+            if (!input.value.startsWith(prefix)) input.value = prefix + input.value
+        }
+    }
+    return input
+
+}
+
+
 const draw_state_detail = (key,value,data,disabled=true) => {
     let dom = document.createElement("div")
     let key_input,value_input
@@ -155,6 +178,7 @@ const draw_state_detail = (key,value,data,disabled=true) => {
         if (!key_input.value || !value_input.value){
             return
         }
+        if (key_input.value) key_input.value = key_input.value.replaceAll(" ","_")
         console.log(data)
         if (data[key] instanceof Array){
             data[key] = data[key].filter(item => item!=value)
@@ -209,25 +233,16 @@ const draw_pop_detail = (cu,religion,size,data,pop_type,disabled=true) => {
 
     let lp = document.createTextNode("(")
     let rp = document.createTextNode(")")
-    let r_input = document.createElement("input")
-    if (religion)r_input.value = religion
-    r_input.type = "text"
-    r_input.classList.add("r_input")
+
+    let r_input = create_input("religion","r_input",religion)
+
     dom.appendChild(lp)
     dom.appendChild(r_input)
     dom.appendChild(rp)
 
-    let cu_input = document.createElement("input")
-    cu_input.value = cu
-    if (!cu) cu_input.value = ""
-    cu_input.type = "text"
-    cu_input.classList.add("cu_input")
+    let cu_input = create_input("culture","cu_input",cu)
     let op = document.createTextNode("=")
-    let value_input = document.createElement("input")
-    value_input.value = size
-    if (!size) value_input.value = 0
-    value_input.type = "text"
-    value_input.classList.add("value_input")
+    let value_input = create_input("size","value_input",size,0)
     dom.appendChild(cu_input)
     dom.appendChild(op)
     dom.appendChild(value_input)
@@ -238,16 +253,9 @@ const draw_pop_detail = (cu,religion,size,data,pop_type,disabled=true) => {
     dom.appendChild(plus)
 
 
-    let pt_input = document.createElement("input")
-    console.log(pop_type)
-    if (pop_type)pt_input.value = pop_type
-    pt_input.type = "text"
-    pt_input.classList.add("pt_input")
+    let pt_input = create_input("pop_type","pt_input",pop_type)
     dom.appendChild(pt_input)
 
-    cu_input.placeholder = "culture"
-    value_input.placeholder = "size"
-    r_input.placeholder = "religion"
     pt_input.placeholder = "pop_type"
 
 
@@ -279,6 +287,8 @@ const draw_pop_detail = (cu,religion,size,data,pop_type,disabled=true) => {
         let push = false
         let procees = false
 
+        if (cu_input.value) cu_input.value = cu_input.value.replaceAll(" ","_")
+        
         let arr = {}
         arr["culture"] = cu_input.value
         if (data["create_pop"]["religion"]&&r_input.value || r_input.value) arr["religion"] = r_input.value
@@ -382,29 +392,12 @@ const draw_building_detail = (key,lv,re,pm,data,disabled=true) => {
     let minus = btn_adjustment("-")
     dom.appendChild(minus)
 
-
-    let key_input = document.createElement("input")
-    key_input.value = key
-    if (!key) key_input.value = ""
-    key_input.type = "text"
-    key_input.classList.add("key_input")
+    let key_input = create_input("building","key_input",key,"",false,"building_")
     let op = document.createTextNode("×")
-    let value_input = document.createElement("input")
-    value_input.value = lv
-    if (!lv) value_input.value = ""
-    value_input.type = "text"
-    value_input.classList.add("lv_input")
-    
+    let value_input = create_input("level","lv_input",lv)
     let opplus = document.createTextNode("+")
-    let re_input = document.createElement("input")
-    re_input.value = re
-    if (!re) re_input.value = ""
-    re_input.type = "text"
-    re_input.classList.add("lv_input")
+    let re_input = create_input("reserves","lv_input",re)
 
-    key_input.placeholder = "building"
-    value_input.placeholder = "level"
-    re_input.placeholder = "reserves"
 
     dom.appendChild(key_input)
     dom.appendChild(op)
@@ -521,12 +514,7 @@ const draw_pm_detail = (key,data,kw="") => {
     let minus = btn_adjustment("-")
     dom.appendChild(minus)
 
-    let key_input = document.createElement("input")
-    key_input.value = key
-    key_input.type = "text"
-    key_input.classList.add("key_input")
-
-    key_input.placeholder = "activate_production_methods"
+    let key_input = create_input("activate_production_methods","key_input",key)
 
     dom.appendChild(key_input)
     let plus = btn_adjustment("+")
@@ -586,15 +574,11 @@ const draw_one_detail = (key,text,data,kw) => {
     let dom = document.createElement("div")
 
     let alands = document.createTextNode(text)
-    let key_input = document.createElement("input")
+    let key_input = create_input("arable_resources","key_input",key)
     
-    key_input.value = key
-    key_input.type = "text"
-    key_input.classList.add("key_input")
     dom.appendChild(alands)
     dom.appendChild(key_input)
-    
-    key_input.placeholder = "arable_resources"
+
 
     let plus = btn_adjustment("√")
     dom.appendChild(plus)
@@ -621,22 +605,15 @@ const draw_kv_detail = (key,value,data) => {
     let minus = btn_adjustment("-")
     dom.appendChild(minus)
 
-    let key_input = document.createElement("input")
-    key_input.value = key
-    key_input.type = "text"
-    key_input.classList.add("key_input")
+    let key_input = create_input("capped_resources","key_input",key)
     dom.appendChild(key_input)
 
     let op = document.createTextNode("=")
     dom.appendChild(op)
     
-    let value_input = document.createElement("input")
-    value_input.value = value
-    value_input.type = "text"
-    value_input.classList.add("value_input")
-    dom.appendChild(value_input)
 
-    key_input.placeholder = "capped_resources"
+    let value_input = create_input("","value_input",value)
+    dom.appendChild(value_input)
     
     let plus = btn_adjustment("+")
     dom.appendChild(plus)
@@ -693,44 +670,27 @@ const draw_resource_detail = (key,akey,un,max,data,index) => {
     let minus = btn_adjustment("-")
     dom.appendChild(minus)
 
-    let key_input = document.createElement("input")
-    key_input.value = key
-    key_input.type = "text"
-    key_input.classList.add("key_resource_input")
+
+    let key_input = create_input("type","key_resource_input",key)
     dom.appendChild(key_input)
 
     let opor = document.createTextNode("/")
     dom.appendChild(opor)
 
-    let akey_input = document.createElement("input")
-    if (akey) akey_input.value = akey
-    akey_input.type = "text"
-    akey_input.classList.add("key_resource_input")
+    let akey_input = create_input("depleted_type","key_resource_input",akey)
     dom.appendChild(akey_input)
 
     let op = document.createTextNode("=")
     dom.appendChild(op)
 
-    
-    let un_input = document.createElement("input")
-    un_input.value = un
-    un_input.type = "text"
-    un_input.classList.add("pico_input")
+    let un_input = create_input("undiscovered_amount","pico_input",un)
     dom.appendChild(un_input)
     
     let opor_ = document.createTextNode("/")
     dom.appendChild(opor_)
     
-    let max_input = document.createElement("input")
-    if (max) max_input.value = max
-    max_input.type = "text"
-    max_input.classList.add("pico_input")
+    let max_input = create_input("discover_amount_max","pico_input",max)
     dom.appendChild(max_input)
-
-    key_input.placeholder = "type"
-    akey_input.placeholder = "depleted_type"
-    un_input.placeholder = "undiscovered_amount"
-    max_input.placeholder = "discover_amount_max"
 
     let plus = btn_adjustment("+") 
     dom.appendChild(plus)

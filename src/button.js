@@ -73,11 +73,11 @@ dump_button.onclick = async function(e) {
             body: JSON.stringify({
                 "src":"outputs",
                 "data":{
-                    "00_states.txt":new TextDecoder().decode(history_state_write),
-                    "01_state_regions.txt":new TextDecoder().decode(state_regions_map_write),
-                    "02_strategic_regions.txt":new TextDecoder().decode(strategic_regions_map_write),
-                    "04_buildings.txt":new TextDecoder().decode(buildings_map_write),
-                    "05_pops.txt":new TextDecoder().decode(pops_map_write)
+                    "00_states.txt":new TextDecoder().decode(history_state_write).replaceAll("  ","\t").replaceAll("="," = "),
+                    "01_state_regions.txt":new TextDecoder().decode(state_regions_map_write).replaceAll("  ","\t").replaceAll("="," = "),
+                    "02_strategic_regions.txt":new TextDecoder().decode(strategic_regions_map_write).replaceAll("  ","\t").replaceAll("="," = "),
+                    "04_buildings.txt":new TextDecoder().decode(buildings_map_write).replaceAll("  ","\t").replaceAll("="," = "),
+                    "05_pops.txt":new TextDecoder().decode(pops_map_write).replaceAll("  ","\t").replaceAll("="," = ")
                 }
             })
         }

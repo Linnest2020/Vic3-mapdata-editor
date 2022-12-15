@@ -16,6 +16,18 @@ var provs = new Set();
 var provs_name = new Set();
 var state_name = new Set()
 
+var reset_layer = new OffscreenCanvas(0,0)
+var state_layer = new OffscreenCanvas(0,0)
+var state_layer = new OffscreenCanvas(0,0)
+var strategic_layer = new OffscreenCanvas(0,0)
+var terrain_layer = new OffscreenCanvas(0,0)
+var border_layer = new OffscreenCanvas(0,0)
+var hub_layer = new OffscreenCanvas(0,0)
+var locator_layer = new OffscreenCanvas(0,0)
+var river_layer = new OffscreenCanvas(0,0)
+
+var render_layer = new OffscreenCanvas(0,0)
+
 var reset_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
 var state_data = null
 var strategic_data = null
@@ -25,6 +37,29 @@ var colormap = null
 var statecolormap = {}
 var statepointmap = {}
 var mode = "prov"
+
+
+var layers = {
+    reset_layer,
+    state_layer,
+    state_layer,
+    strategic_layer,
+    terrain_layer,
+    border_layer,
+    hub_layer,
+    locator_layer,
+    river_layer,
+
+    render_layer
+}
+
+const init_layers = (width,height) => {
+    for (let values=Object.values(layers),i=values.length;i--;){
+        values[i].width = width
+        values[i].height = height
+    }
+}
+
 
 var full_data = {
     ctx,
@@ -39,11 +74,59 @@ var full_data = {
     state_data,
     strategic_data,
     terrain_data,
+
+    layers,
 }
 export {full_data}
 
 var zoom_size = [1/4,1/2,1,2,3,4,5]
 var zoom_index = 2
+
+class Point{
+    constructor(x=-1,y=-1,sindex=-1){
+        if ( x>=0 && y >= 0){
+            this.x = x
+            this.y = y
+            this.sindex = (this.y*canvas.width + this.x)*4
+        } else if ( sindex >=0 ){
+            this.sindex = sindex
+            this.x = (sindex/4) % canvas.width
+            this.y = (sindex/4-this.x)/canvas.width
+
+        } else console.assert("No input to a point")
+    }
+
+    prev_sindex(){
+        return this.sindex - 4
+    }
+
+    next_sindex(){
+        return this.sindex + 4
+    }
+
+    to_color_turple(imgdata){
+        let r = imgdata.data[this.sindex]
+        let g = imgdata.data[this.sindex+1]
+        let b = imgdata.data[this.sindex+2]
+        return [r,g,b]
+    }
+
+    to_color_hex(imgdata){
+        let color = this.to_color_turple(imgdata)
+        return "x" + (color[0].toString(16).padStart(2, '0') + 
+            color[1].toString(16).padStart(2, '0') + 
+            color[2].toString(16).padStart(2, '0')).toUpperCase()
+    }
+
+    to_color_num(imgdata){
+        let color = this.to_color_turple(imgdata)
+        return color[0]<<16+color[1]<<8+color[2]
+    }
+
+    toWorld(){
+
+    }
+}
 
 var panelboard = document.getElementById('panelboard')
 var select_info = panelboard.querySelector(".panel_top_right")
@@ -133,6 +216,9 @@ img.crossOrigin = ""
 canvas.width = img.width;
 canvas.height = img.height;
 
+init_layers(img.width,img.height)
+
+
 let init_worker = new Worker("src/workers/init_worker.js")
 let string_worker = new Worker("src/workers/string_worker.js")
 
@@ -184,6 +270,13 @@ init_worker.onmessage = function(e) {
 img.onload =function(e){
     ctx.drawImage(img, 0, 0);
     try{
+        full_data.layers.reset_layer.getContext("2d").drawImage(img,0,0)
+        console.log(full_data.layers.reset_layer.getContext("2d"))
+    }
+    catch(err){
+        console.log(err)
+    }
+    try{
         reset_data = ctx.getImageData(0,0,canvas.width,canvas.height) 
         full_data.reset_data = reset_data
     }
@@ -203,6 +296,9 @@ const river_map = new Image()
 const river_list = []
 river_map.onload = function(e){
     ctx.drawImage(river_map,0,0)
+    
+    full_data.layers.river_layer.getContext("2d").drawImage(river_map,0,0)
+
     river_data = ctx.getImageData(0,0,canvas.width,canvas.height)
     little_data.river_data = river_data
     ctx.putImageData(reset_data, 0, 0)
