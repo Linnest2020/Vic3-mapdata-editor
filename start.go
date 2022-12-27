@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -95,6 +96,10 @@ func get_vanilla_path() string {
 		return ""
 	} else {
 		isGameinstall = true
+	}
+	_, err0 := os.Stat(data_src + "/provinces.png")
+	if err0 == nil {
+		isGameinstall = false
 	}
 	return key
 }
