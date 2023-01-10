@@ -82,7 +82,11 @@ const init_state_map = (colormap,history_state_dict) => {
         }
 
         let state_block = state_region_block[u]["create_state"]
-
+        if (!state_block) {
+            console.log(u) // TODO: a better displaying
+            delete state_region_block[u]
+            continue
+        }
         if (state_block instanceof Array){
             for (let n = 0;n < state_block.length;n++){
                 let state_mark = `${u}.region_state:${state_block[n]["country"]}`
